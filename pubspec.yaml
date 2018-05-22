@@ -5,7 +5,7 @@ author: Zulfahmi Ahmad <zulfahmi93@outlook.com>
 homepage: https://github.com/zulfahmi93/dart_libpray
 
 environment:
-  sdk: '>=2.0.0-dev.52.0'
+  sdk: '>=2.0.0-dev.52.0 <3.0.0'
 
 dependencies:
   latlong: ^0.4.5
