@@ -1,18 +1,18 @@
 name: libpray
 description: Muslim prayer times library for Dart which includes various calculation and juristic method that can be customised.
-version: 0.0.1
+version: 0.0.2
 author: Zulfahmi Ahmad <zulfahmi93@outlook.com>
 homepage: https://github.com/zulfahmi93/dart_libpray
 
 environment:
-  sdk: '>=1.20.1 <2.0.0'
+  sdk: '>=2.0.0-dev.52.0'
 
 dependencies:
   latlong: ^0.4.5
   libcalendar: ^0.0.2
-  logging: ^0.11.3
-  meta: ^1.1.2
+  logging: ^0.11.3+1
+  meta: ^1.1.5
 
 dev_dependencies:
-  test: ^0.12.0
+  test: ^0.12.38+1
   mockito: ^2.2.3
