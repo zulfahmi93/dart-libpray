@@ -42,10 +42,10 @@ void _testGetPrayerTimesForApril12th2018(DateTime date, PrayerCalculationSetting
     expect(prayers.fajr, equals(new DateTime(2018, 4, 12, 5, 55)));
     expect(prayers.sunrise, equals(new DateTime(2018, 4, 12, 7, 13)));
     expect(prayers.dhuha, equals(new DateTime(2018, 4, 12, 7, 38)));
-    expect(prayers.dhuhr, equals(new DateTime(2018, 4, 12, 13, 17)));
+    expect(prayers.dhuhr, equals(new DateTime(2018, 4, 12, 13, 18)));
     expect(prayers.asr, equals(new DateTime(2018, 4, 12, 16, 29)));
     expect(prayers.sunset, equals(new DateTime(2018, 4, 12, 19, 22)));
-    expect(prayers.maghrib, equals(new DateTime(2018, 4, 12, 19, 22)));
+    expect(prayers.maghrib, equals(new DateTime(2018, 4, 12, 19, 23)));
     expect(prayers.isha, equals(new DateTime(2018, 4, 12, 20, 32)));
     expect(prayers.midnight, equals(new DateTime(2018, 4, 13, 1, 17)));
   });
@@ -58,10 +58,10 @@ void _testGetPrayerTimesForToday(DateTime date, PrayerCalculationSettings settin
     expect(prayers.fajr, equals(new DateTime(2018, 4, 12, 5, 55)));
     expect(prayers.sunrise, equals(new DateTime(2018, 4, 12, 7, 13)));
     expect(prayers.dhuha, equals(new DateTime(2018, 4, 12, 7, 38)));
-    expect(prayers.dhuhr, equals(new DateTime(2018, 4, 12, 13, 17)));
+    expect(prayers.dhuhr, equals(new DateTime(2018, 4, 12, 13, 18)));
     expect(prayers.asr, equals(new DateTime(2018, 4, 12, 16, 29)));
     expect(prayers.sunset, equals(new DateTime(2018, 4, 12, 19, 22)));
-    expect(prayers.maghrib, equals(new DateTime(2018, 4, 12, 19, 22)));
+    expect(prayers.maghrib, equals(new DateTime(2018, 4, 12, 19, 23)));
     expect(prayers.isha, equals(new DateTime(2018, 4, 12, 20, 32)));
     expect(prayers.midnight, equals(new DateTime(2018, 4, 13, 1, 17)));
   });
@@ -79,7 +79,7 @@ void _testGetNextPrayerTime(DateTime date, PrayerCalculationSettings settings, G
   test('Test get next (mocked for April 12th, 2018) prayer time at [2, 101, 2] using JAKIM.', () {
     final Prayer prayer = Prayer.next(settings, geo, timeZone, clock);
     expect(prayer.type, equals(PrayerType.dhuhr));
-    expect(prayer.time, equals(new DateTime(2018, 4, 12, 13, 17)));
+    expect(prayer.time, equals(new DateTime(2018, 4, 12, 13, 18)));
   });
 }
 
@@ -95,7 +95,7 @@ void _testGetAfterLaterPrayerTime(DateTime date, PrayerCalculationSettings setti
   test('Test get after later (mocked for April 12th, 2018) prayer time at [2, 101, 2] using JAKIM.', () {
     final Prayer prayer = Prayer.afterLater(settings, geo, timeZone, clock);
     expect(prayer.type, equals(PrayerType.maghrib));
-    expect(prayer.time, equals(new DateTime(2018, 4, 12, 19, 22)));
+    expect(prayer.time, equals(new DateTime(2018, 4, 12, 19, 23)));
   });
 }
 
