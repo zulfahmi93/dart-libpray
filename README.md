@@ -1,11 +1,13 @@
 # Muslim Prayer Times Library for Dart
 
+[![Pub](https://img.shields.io/pub/v/libcalendar.svg?style=flat-square)](https://github.com/zulfahmi93/dart_libcalendar)
+
 ## Quick Start
 
 1. Open your `pubspec.yaml` file and add this entry:
 
     ```yaml
-    libpray: ^0.0.1
+    libpray: ^0.0.2
     ```
 
 2. Then run `pub get`.
