@@ -1,86 +1,91 @@
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+
 import 'calculation_method.dart';
 import 'high_latitude_adjustment.dart';
 import 'juristic_method.dart';
+
+part 'prayer_calculation_settings.g.dart';
 
 ///
 /// Provides properties for holding information used for calculating prayer
 /// times. Provides method for searching prayer times calculation settings from
 /// given location information.
 ///
-class PrayerCalculationSettings {
-  /* BEGIN FIELD SECTION */
+abstract class PrayerCalculationSettings implements Built<PrayerCalculationSettings, PrayerCalculationSettingsBuilder> {
+  // ---------------------------- CONSTRUCTORS ----------------------------
 
   ///
-  /// Gets or sets the calculation parameter for imsak prayer.
+  /// Create [PrayerCalculationSettings].
   ///
-  PrayerCalculationParameter imsakParameter = const PrayerCalculationParameter(
-      -10.0, PrayerCalculationParameterType.minutesAdjust);
+  factory PrayerCalculationSettings([updates(PrayerCalculationSettingsBuilder b)]) = _$PrayerCalculationSettings;
 
   ///
-  /// Gets or sets the calculation method for calculating fajr, maghrib and
-  /// isha prayers.
+  /// Create [PrayerCalculationSettings].
   ///
-  CalculationMethod calculationMethod = new CalculationMethod();
+  PrayerCalculationSettings._();
 
   ///
-  /// Gets or sets the juristic method for calculating asr prayer.
+  /// Create [PrayerCalculationSettings].
   ///
-  JuristicMethod juristicMethod = new JuristicMethod();
+  factory PrayerCalculationSettings.defaultSettings() {
+    return PrayerCalculationSettings((PrayerCalculationSettingsBuilder b) => b
+      ..imsakParameter.value = -10.0
+      ..imsakParameter.type = PrayerCalculationParameterType.minutesAdjust
+      ..calculationMethod.replace(CalculationMethod.fromPreset(preset: CalculationMethodPreset.ummAlQuraUniversity, when: DateTime.now().toUtc()))
+      ..juristicMethod.replace(JuristicMethod.fromPreset(preset: JuristicMethodPreset.standard))
+      ..highLatitudeAdjustment = HighLatitudeAdjustment.none
+      ..imsakMinutesAdjustment = 0
+      ..fajrMinutesAdjustment = 0
+      ..sunriseMinutesAdjustment = 0
+      ..dhuhaMinutesAdjustment = 0
+      ..dhuhrMinutesAdjustment = 0
+      ..asrMinutesAdjustment = 0
+      ..maghribMinutesAdjustment = 0
+      ..ishaMinutesAdjustment = 0);
+  }
 
-  ///
-  /// Gets or sets high latitude adjustment method for adjusting imsak, fajr,
-  /// maghrib and isha prayer times at a high latitude location.
-  ///
-  HighLatitudeAdjustment highLatitudeAdjustment =
-      HighLatitudeAdjustment.none;
+  // ----------------------------- SERIALIZER -----------------------------
 
-  ///
-  /// Gets or sets the minute adjustment parameter for imsak prayer.
-  ///
-  int imsakMinutesAdjustment = 0;
+  /// [Serializer] for this object.
+  static Serializer<PrayerCalculationSettings> get serializer => _$prayerCalculationSettingsSerializer;
 
-  ///
-  /// Gets or sets the minute adjustment parameter for fajr prayer.
-  ///
-  int fajrMinutesAdjustment = 0;
+  // ----------------------------- PROPERTIES -----------------------------
 
-  ///
-  /// Gets or sets the minute adjustment parameter for sunrise prayer.
-  ///
-  int sunriseMinutesAdjustment = 0;
+  /// Calculation parameter for imsak prayer.
+  PrayerCalculationParameter get imsakParameter;
 
-  ///
-  /// Gets or sets the minute adjustment parameter for dhuha prayer.
-  ///
-  int dhuhaMinutesAdjustment = 0;
+  /// Calculation method for calculating fajr, maghrib and isha prayer.
+  CalculationMethod get calculationMethod;
 
-  ///
-  /// Gets or sets the minute adjustment parameter for dhuhr prayer.
-  ///
-  int dhuhrMinutesAdjustment = 0;
+  /// Juristic method for calculating asr prayer.
+  JuristicMethod get juristicMethod;
 
-  ///
-  /// Gets or sets the minute adjustment parameter for asr prayer.
-  ///
-  int asrMinutesAdjustment = 0;
+  /// High latitude adjustment method for adjusting imsak, fajr, maghrib and
+  /// isha prayer times at a high latitude location.
+  HighLatitudeAdjustment get highLatitudeAdjustment;
 
-  ///
-  /// Gets or sets the minute adjustment parameter for maghrib prayer.
-  ///
-  int maghribMinutesAdjustment = 0;
+  /// Minute adjustment parameter for imsak prayer.
+  int get imsakMinutesAdjustment;
 
-  ///
-  /// Gets or sets the minute adjustment parameter for isha prayer.
-  ///
-  int ishaMinutesAdjustment = 0;
+  /// Minute adjustment parameter for fajr prayer.
+  int get fajrMinutesAdjustment;
 
-  /* END FIELD SECTION */
-  /* BEGIN CONSTRUCTOR SECTION */
+  /// Minute adjustment parameter for sunrise.
+  int get sunriseMinutesAdjustment;
 
-  ///
-  /// Create new [PrayerCalculationSettings].
-  ///
-  PrayerCalculationSettings();
+  /// Minute adjustment parameter for dhuha prayer.
+  int get dhuhaMinutesAdjustment;
 
-/* END CONSTRUCTOR SECTION */
+  /// Minute adjustment parameter for dhuhr prayer.
+  int get dhuhrMinutesAdjustment;
+
+  /// Minute adjustment parameter for asr prayer.
+  int get asrMinutesAdjustment;
+
+  /// Minute adjustment parameter for maghrib prayer.
+  int get maghribMinutesAdjustment;
+
+  /// Minute adjustment parameter for isha prayer.
+  int get ishaMinutesAdjustment;
 }

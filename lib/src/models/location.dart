@@ -1,34 +1,37 @@
-import 'package:meta/meta.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+
+part 'location.g.dart';
 
 ///
 /// Represents the point of a location on this earth.
 ///
-@immutable
-class Geocoordinate {
-  /* BEGIN FIELD SECTION */
+abstract class Geocoordinate implements Built<Geocoordinate, GeocoordinateBuilder> {
+  // ---------------------------- CONSTRUCTORS ----------------------------
 
   ///
+  /// Create [Geocoordinate].
+  ///
+  factory Geocoordinate([updates(GeocoordinateBuilder b)]) = _$Geocoordinate;
+
+  ///
+  /// Create [Geocoordinate].
+  ///
+  Geocoordinate._();
+
+  // ----------------------------- SERIALIZER -----------------------------
+
+  /// [Serializer] for this object.
+  static Serializer<Geocoordinate> get serializer => _$geocoordinateSerializer;
+
+  // ----------------------------- PROPERTIES -----------------------------
+
   /// Gets the latitude of this coordinate.
-  ///
-  final double latitude;
+  double get latitude;
 
-  ///
   /// Gets the longitude of this coordinate.
-  ///
-  final double longitude;
+  double get longitude;
 
-  ///
   /// Gets the altitude of this coordinate.
-  ///
-  final double altitude;
-
-  /* END FIELD SECTION */
-  /* BEGIN CONSTRUCTOR SECTION */
-
-  ///
-  /// Create new [Geocoordinate].
-  ///
-  const Geocoordinate(this.latitude, this.longitude, this.altitude);
-
-  /* END CONSTRUCTOR SECTION */
+  double get altitude;
 }

@@ -1,98 +1,89 @@
-import 'package:logging/logging.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+import 'package:meta/meta.dart';
+
+part 'juristic_method.g.dart';
 
 ///
-/// Provides properties for holding information used for calculating asar
-/// prayer. Provides methods for getting and setting the prayer times juristic
-/// method parameter.
+/// .
 ///
-class JuristicMethod {
-  /* BEGIN FIELD SECTION */
-
-  final Logger _log = new Logger('CalculationMethod');
-  JuristicMethodPreset _preset;
-  int _timeOfShadow;
-
-  /* END FIELD SECTION */
-  /* BEGIN CONSTRUCTOR SECTION */
+abstract class JuristicMethod implements Built<JuristicMethod, JuristicMethodBuilder> {
+  // ---------------------------- CONSTRUCTORS ----------------------------
 
   ///
-  /// Create new [JuristicMethod].
+  /// Create [JuristicMethod].
   ///
-  JuristicMethod() {
-    setJuristicMethodPreset(JuristicMethodPreset.standard);
+  factory JuristicMethod([updates(JuristicMethodBuilder b)]) = _$JuristicMethod;
+
+  ///
+  /// Create [JuristicMethod].
+  ///
+  JuristicMethod._();
+
+  ///
+  /// Create [JuristicMethod].
+  ///
+  factory JuristicMethod.fromPreset({@required JuristicMethodPreset preset}) {
+    return preset.getJuristicMethod();
   }
 
-  /* END CONSTRUCTOR SECTION */
-  /* BEGIN PROPERTY SECTION */
+  // ----------------------------- SERIALIZER -----------------------------
 
-  ///
+  /// [Serializer] for this object.
+  static Serializer<JuristicMethod> get serializer => _$juristicMethodSerializer;
+
+  // ----------------------------- PROPERTIES -----------------------------
+
   /// Gets the juristic method preset.
-  ///
-  JuristicMethodPreset get preset => _preset;
+  JuristicMethodPreset get preset;
 
-  ///
   /// Gets the juristic method time of shadow parameter.
-  ///
-  int get timeOfShadow => _timeOfShadow;
-
-  /* END PROPERTY SECTION */
-  /* BEGIN METHOD SECTION */
-
-  ///
-  /// Gets the [JuristicMethodPreset] enumeration value which agrees to
-  /// juristic method parameters held by current instance of
-  /// [JuristicMethodPreset] object.
-  ///
-  JuristicMethodPreset getJuristicMethodPreset() {
-    _log.fine('Getting juristic method preset.');
-
-    if (timeOfShadow == 2) {
-      _log.fine('Hanafi juristic method preset returned.');
-      _preset = JuristicMethodPreset.hanafi;
-      return JuristicMethodPreset.hanafi;
-    }
-
-    _log.fine('Standard juristic method preset returned.');
-    _preset = JuristicMethodPreset.standard;
-    _timeOfShadow = 1;
-    return JuristicMethodPreset.standard;
-  }
-
-  ///
-  /// Sets the juristic method parameters from given method preset.
-  ///
-  void setJuristicMethodPreset(JuristicMethodPreset preset) {
-    assert(preset != null);
-
-    switch (preset) {
-      case JuristicMethodPreset.standard:
-        _log.fine('Setting juristic method to Standard.');
-        _preset = JuristicMethodPreset.standard;
-        _timeOfShadow = 1;
-        return;
-
-      case JuristicMethodPreset.hanafi:
-        _log.fine('Setting juristic method to Hanafi.');
-        _preset = JuristicMethodPreset.hanafi;
-        _timeOfShadow = 2;
-        return;
-
-      default:
-        throw new ArgumentError.value(
-            preset, 'preset', 'Parameter [preset] contains an invalid value.');
-    }
-  }
-
-  /* END METHOD SECTION */
+  int get timeOfShadow;
 }
 
 ///
-/// Represents the prayer times juristic method preset.
+/// Provides properties for holding information used for calculating asr
+/// prayer. Provides methods for getting and setting the prayer times juristic
+/// method parameter.
 ///
-enum JuristicMethodPreset {
+class JuristicMethodPreset extends EnumClass {
+  // --------------------------- ENUM CONSTANTS ---------------------------
+
   /// Standard juristic method.
-  standard,
+  static const JuristicMethodPreset standard = _$standard;
 
   /// Hanafi juristic method.
-  hanafi
+  static const JuristicMethodPreset hanafi = _$hanafi;
+
+  // ---------------------------- CONSTRUCTORS ----------------------------
+
+  ///
+  /// Create [JuristicMethodPreset].
+  ///
+  const JuristicMethodPreset._(String name) : super(name);
+
+  // ----------------------------- PROPERTIES -----------------------------
+
+  /// All valid values for [JuristicMethodPreset].
+  static BuiltSet<JuristicMethodPreset> get values => _$values;
+
+  /// Gets the corresponding [JuristicMethodPreset] value for given [name].
+  static JuristicMethodPreset valueOf(String name) => _$valueOf(name);
+
+  // ----------------------------- SERIALIZER -----------------------------
+
+  /// [Serializer] for this object.
+  static Serializer<JuristicMethodPreset> get serializer => _$juristicMethodPresetSerializer;
+
+  // ------------------------------- METHODS ------------------------------
+
+  ///
+  /// Gets the [JuristicMethod] for this preset.
+  ///
+  JuristicMethod getJuristicMethod() {
+    return JuristicMethod((JuristicMethodBuilder b) => b
+      ..preset = this
+      ..timeOfShadow = this == JuristicMethodPreset.hanafi ? 2 : 1);
+  }
 }

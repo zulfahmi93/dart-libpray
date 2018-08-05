@@ -10,24 +10,18 @@ void testJuristicMethod() {
 
 void _testSetPresetStandard() {
   test('Test set JuristicMethod preset to Ithna Ashari.', () {
-    final JuristicMethod method = new JuristicMethod()
-      ..setJuristicMethodPreset(JuristicMethodPreset.standard);
+    final JuristicMethod method = JuristicMethod.fromPreset(preset: JuristicMethodPreset.standard);
 
     expect(method.preset, equals(JuristicMethodPreset.standard));
     expect(method.timeOfShadow, equals(1));
-    expect(method.getJuristicMethodPreset(),
-        equals(JuristicMethodPreset.standard));
   });
 }
 
 void _testSetPresetHanafi() {
   test('Test set JuristicMethod preset to Hanafi.', () {
-    final JuristicMethod method = new JuristicMethod()
-      ..setJuristicMethodPreset(JuristicMethodPreset.hanafi);
+    final JuristicMethod method = JuristicMethod.fromPreset(preset: JuristicMethodPreset.hanafi);
 
     expect(method.preset, equals(JuristicMethodPreset.hanafi));
     expect(method.timeOfShadow, equals(2));
-    expect(
-        method.getJuristicMethodPreset(), equals(JuristicMethodPreset.hanafi));
   });
 }

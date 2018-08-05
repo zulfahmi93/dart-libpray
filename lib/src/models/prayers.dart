@@ -1,3 +1,6 @@
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:libcalendar/libcalendar.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -10,154 +13,189 @@ import 'high_latitude_adjustment.dart';
 import 'location.dart';
 import 'prayer_calculation_settings.dart';
 
+part 'prayers.g.dart';
+
 ///
 /// Prayer times data for a single day.
 ///
-@immutable
-class Prayers {
-  /* BEGIN FIELD SECTION */
-
-  /// Imsak prayer time.
-  final DateTime imsak;
-
-  /// Fajr prayer time.
-  final DateTime fajr;
-
-  /// Sunrise time.
-  final DateTime sunrise;
-
-  /// Dhuha prayer time.
-  final DateTime dhuha;
-
-  /// Dhuhr prayer time.
-  final DateTime dhuhr;
-
-  /// Asr prayer time.
-  final DateTime asr;
-
-  /// Sunset time.
-  final DateTime sunset;
-
-  /// Maghrib prayer time.
-  final DateTime maghrib;
-
-  /// Isha prayer time.
-  final DateTime isha;
-
-  /// Midnight time.
-  final DateTime midnight;
-
-  /* END FIELD SECTION */
-  /* BEGIN CONSTRUCTOR SECTION */
+abstract class Prayers implements Built<Prayers, PrayersBuilder> {
+  // ---------------------------- CONSTRUCTORS ----------------------------
 
   ///
-  /// Create new [Prayers].
+  /// Create [Prayers].
   ///
-  const Prayers._(this.imsak, this.fajr, this.sunrise, this.dhuha, this.dhuhr, this.asr, this.sunset, this.maghrib, this.isha, this.midnight);
-
-  /* END CONSTRUCTOR SECTION */
-  /* BEGIN METHOD SECTION */
+  factory Prayers([updates(PrayersBuilder b)]) = _$Prayers;
 
   ///
-  /// Create new [Prayers] for today.
+  /// Create [Prayers].
   ///
-  static Prayers today(PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone, [Clock clock = const Clock()]) {
+  Prayers._();
+
+  ///
+  /// Create [Prayers].
+  ///
+  factory Prayers.today(
+      {@required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone, Clock clock = const Clock()}) {
     final DateTime now = clock.now();
     return _PrayerCalculator.getPrayerTimesForOneDay(now, settings, coordinate, timeZone);
   }
 
   ///
-  /// Create new [Prayers] for given date.
+  /// Create [Prayers].
   ///
-  static Prayers on(DateTime date, PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone, [Clock clock = const Clock()]) {
+  factory Prayers.on({@required DateTime date, @required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone}) {
     return _PrayerCalculator.getPrayerTimesForOneDay(date, settings, coordinate, timeZone);
   }
 
-/* END METHOD SECTION */
+  // ----------------------------- SERIALIZER -----------------------------
+
+  /// [Serializer] for this object.
+  static Serializer<Prayers> get serializer => _$prayersSerializer;
+
+  // ----------------------------- PROPERTIES -----------------------------
+
+  /// Imsak prayer time.
+  DateTime get imsak;
+
+  /// Fajr prayer time.
+  DateTime get fajr;
+
+  /// Sunrise prayer time.
+  DateTime get sunrise;
+
+  /// Dhuha prayer time.
+  DateTime get dhuha;
+
+  /// Dhuhr prayer time.
+  DateTime get dhuhr;
+
+  /// Asr prayer time.
+  DateTime get asr;
+
+  /// Sunset time.
+  DateTime get sunset;
+
+  /// Maghrib prayer time.
+  DateTime get maghrib;
+
+  /// Isha prayer time.
+  DateTime get isha;
+
+  /// Midnight time.
+  DateTime get midnight;
 }
 
 ///
 /// Data for a particular prayer.
 ///
-@immutable
-class Prayer {
-  /* BEGIN FIELD SECTION */
-
-  /// Prayer type.
-  final PrayerType type;
-
-  /// Prayer time.
-  final DateTime time;
-
-  /* END FIELD SECTION */
-  /* BEGIN CONSTRUCTOR SECTION */
+abstract class Prayer implements Built<Prayer, PrayerBuilder> {
+  // ---------------------------- CONSTRUCTORS ----------------------------
 
   ///
-  /// Create new [Prayer].
+  /// Create [Prayer].
   ///
-  const Prayer(this.type, this.time);
-
-  /* END CONSTRUCTOR SECTION */
-  /* BEGIN METHOD SECTION */
+  factory Prayer([updates(PrayerBuilder b)]) = _$Prayer;
 
   ///
-  /// Create new [Prayer] for current prayer time.
+  /// Create [Prayer].
   ///
-  static Prayer now(PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone, [Clock clock = const Clock()]) {
+  Prayer._();
+
+  ///
+  /// Create [Prayer].
+  ///
+  factory Prayer.now(
+      {@required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone, Clock clock = const Clock()}) {
     return _PrayerCalculator.getCurrentPrayerTime(clock, settings, coordinate, timeZone);
   }
 
   ///
-  /// Create new [Prayer] for current prayer time.
+  /// Create [Prayer].
   ///
-  static Prayer next(PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone, [Clock clock = const Clock()]) {
+  factory Prayer.next(
+      {@required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone, Clock clock = const Clock()}) {
     return _PrayerCalculator.getNextPrayerTime(clock, settings, coordinate, timeZone);
   }
 
   ///
-  /// Create new [Prayer] for current prayer time.
+  /// Create [Prayer].
   ///
-  static Prayer later(PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone, [Clock clock = const Clock()]) {
+  factory Prayer.later(
+      {@required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone, Clock clock = const Clock()}) {
     return _PrayerCalculator.getLaterPrayerTime(clock, settings, coordinate, timeZone);
   }
 
   ///
-  /// Create new [Prayer] for current prayer time.
+  /// Create [Prayer].
   ///
-  static Prayer afterLater(PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone, [Clock clock = const Clock()]) {
+  factory Prayer.afterLater(
+      {@required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone, Clock clock = const Clock()}) {
     return _PrayerCalculator.getAfterLaterPrayerTime(clock, settings, coordinate, timeZone);
   }
 
-/* END METHOD SECTION */
+  // ----------------------------- SERIALIZER -----------------------------
+
+  /// [Serializer] for this object.
+  static Serializer<Prayer> get serializer => _$prayerSerializer;
+
+  // ----------------------------- PROPERTIES -----------------------------
+
+  /// Prayer type.
+  PrayerType get type;
+
+  /// Prayer time.
+  DateTime get time;
 }
 
 ///
 /// Type of prayer.
 ///
-enum PrayerType {
+class PrayerType extends EnumClass {
+  // --------------------------- ENUM CONSTANTS ---------------------------
+
   /// Imsak prayer type.
-  imsak,
+  static const PrayerType imsak = _$imsak;
 
   /// Fajr prayer type.
-  fajr,
+  static const PrayerType fajr = _$fajr;
 
   /// Sunrise prayer type.
-  sunrise,
+  static const PrayerType sunrise = _$sunrise;
 
   /// Dhuha prayer type.
-  dhuha,
+  static const PrayerType dhuha = _$dhuha;
 
-  /// Dhuha prayer type.
-  dhuhr,
+  /// Dhuhr prayer type.
+  static const PrayerType dhuhr = _$dhuhr;
 
   /// Asr prayer type.
-  asr,
+  static const PrayerType asr = _$asr;
 
   /// Maghrib prayer type.
-  maghrib,
+  static const PrayerType maghrib = _$maghrib;
 
   /// Isha prayer type.
-  isha
+  static const PrayerType isha = _$isha;
+
+  // ---------------------------- CONSTRUCTORS ----------------------------
+
+  ///
+  /// Create [PrayerType].
+  ///
+  const PrayerType._(String name) : super(name);
+
+  // ----------------------------- PROPERTIES -----------------------------
+
+  /// All valid values for [PrayerType].
+  static BuiltSet<PrayerType> get values => _$values;
+
+  /// Gets the corresponding [PrayerType] value for given [name].
+  static PrayerType valueOf(String name) => _$valueOf(name);
+
+  // ----------------------------- SERIALIZER -----------------------------
+
+  /// [Serializer] for this object.
+  static Serializer<PrayerType> get serializer => _$prayerTypeSerializer;
 }
 
 // ignore: avoid_classes_with_only_static_members
@@ -165,7 +203,7 @@ enum PrayerType {
 /// Implementation of prayer times calculation that can be used worldwide.
 ///
 class _PrayerCalculator {
-  /* BEGIN CONSTANT SECTION */
+  // ----------------------------- CONSTANTS ------------------------------
 
   // NOTE: Do imsak time can be calculated using angle parameter?
   // static const double _kImsakDefaultTime = 5.0;
@@ -178,13 +216,11 @@ class _PrayerCalculator {
   static const double _kIshaDefaultTime = 18.0;
   static const int _kMicrosecondsInAnHour = 3600000000;
 
-  /* END CONSTANT SECTION */
-  /* BEGIN FIELD SECTION */
+  // ------------------------------- FIELDS -------------------------------
 
-  static final Logger _log = new Logger('PrayerCalculator');
+  static final Logger _log = Logger('PrayerCalculator');
 
-  /* END FIELD SECTION */
-  /* BEGIN METHOD SECTION */
+  // ------------------------------- METHODS ------------------------------
 
   ///
   /// Generate prayer times for one day at given date.
@@ -202,7 +238,7 @@ class _PrayerCalculator {
     final int year = when.year;
     final int month = when.month;
     final int day = when.day;
-    final DateTime utc = new DateTime.utc(year, month, day);
+    final DateTime utc = DateTime.utc(year, month, day);
     _log.fine('Computing prayer times for one day for date: $utc.');
 
     final double jd = fromGregorianToJulianDate(utc);
@@ -222,17 +258,17 @@ class _PrayerCalculator {
 
     // Convert.
     final Prayers converted = _convertFromFloatingPointFormat(year, month, day, afterAdjustment);
-    final Prayers rounded = new Prayers._(
-        _roundPrayerTime(converted.imsak),
-        _roundPrayerTime(converted.fajr),
-        _roundPrayerTime(converted.sunrise),
-        _roundPrayerTime(converted.dhuha),
-        _roundPrayerTime(converted.dhuhr),
-        _roundPrayerTime(converted.asr),
-        _roundPrayerTime(converted.sunset),
-        _roundPrayerTime(converted.maghrib),
-        _roundPrayerTime(converted.isha),
-        _roundPrayerTime(converted.midnight));
+    final Prayers rounded = Prayers((PrayersBuilder b) => b
+      ..imsak = _roundPrayerTime(converted.imsak)
+      ..fajr = _roundPrayerTime(converted.fajr)
+      ..sunrise = _roundPrayerTime(converted.sunrise)
+      ..dhuha = _roundPrayerTime(converted.dhuha)
+      ..dhuhr = _roundPrayerTime(converted.dhuhr)
+      ..asr = _roundPrayerTime(converted.asr)
+      ..sunset = _roundPrayerTime(converted.sunset)
+      ..maghrib = _roundPrayerTime(converted.maghrib)
+      ..isha = _roundPrayerTime(converted.isha)
+      ..midnight = _roundPrayerTime(converted.midnight));
 
     return rounded;
   }
@@ -246,38 +282,56 @@ class _PrayerCalculator {
     final Prayers yesterday = getPrayerTimesForOneDay(now.add(const Duration(days: -1)), settings, coordinate, timeZone);
 
     if (now.isBefore(today.imsak)) {
-      return new Prayer(PrayerType.isha, yesterday.isha);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.isha
+        ..time = yesterday.isha);
     }
 
     if (now.isBefore(today.fajr)) {
-      return new Prayer(PrayerType.imsak, today.imsak);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.imsak
+        ..time = today.imsak);
     }
 
     if (now.isBefore(today.sunrise)) {
-      return new Prayer(PrayerType.fajr, today.fajr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.fajr
+        ..time = today.fajr);
     }
 
     if (now.isBefore(today.dhuha)) {
-      return new Prayer(PrayerType.sunrise, today.sunrise);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.sunrise
+        ..time = today.sunrise);
     }
 
     if (now.isBefore(today.dhuhr)) {
-      return new Prayer(PrayerType.dhuha, today.dhuha);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.dhuha
+        ..time = today.dhuha);
     }
 
     if (now.isBefore(today.asr)) {
-      return new Prayer(PrayerType.dhuhr, today.dhuhr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.dhuhr
+        ..time = today.dhuhr);
     }
 
     if (now.isBefore(today.maghrib)) {
-      return new Prayer(PrayerType.asr, today.asr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.asr
+        ..time = today.asr);
     }
 
     if (now.isBefore(today.isha)) {
-      return new Prayer(PrayerType.maghrib, today.maghrib);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.maghrib
+        ..time = today.maghrib);
     }
 
-    return new Prayer(PrayerType.isha, today.isha);
+    return Prayer((PrayerBuilder b) => b
+      ..type = PrayerType.isha
+      ..time = today.isha);
   }
 
   ///
@@ -289,38 +343,56 @@ class _PrayerCalculator {
     final Prayers tomorrow = getPrayerTimesForOneDay(now.add(const Duration(days: 1)), settings, coordinate, timeZone);
 
     if (now.isBefore(today.imsak)) {
-      return new Prayer(PrayerType.imsak, today.imsak);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.imsak
+        ..time = today.imsak);
     }
 
     if (now.isBefore(today.fajr)) {
-      return new Prayer(PrayerType.fajr, today.fajr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.fajr
+        ..time = today.fajr);
     }
 
     if (now.isBefore(today.sunrise)) {
-      return new Prayer(PrayerType.sunrise, today.sunrise);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.sunrise
+        ..time = today.sunrise);
     }
 
     if (now.isBefore(today.dhuha)) {
-      return new Prayer(PrayerType.dhuha, today.dhuha);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.dhuha
+        ..time = today.dhuha);
     }
 
     if (now.isBefore(today.dhuhr)) {
-      return new Prayer(PrayerType.dhuhr, today.dhuhr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.dhuhr
+        ..time = today.dhuhr);
     }
 
     if (now.isBefore(today.asr)) {
-      return new Prayer(PrayerType.asr, today.asr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.asr
+        ..time = today.asr);
     }
 
     if (now.isBefore(today.maghrib)) {
-      return new Prayer(PrayerType.maghrib, today.maghrib);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.maghrib
+        ..time = today.maghrib);
     }
 
     if (now.isBefore(today.isha)) {
-      return new Prayer(PrayerType.isha, today.isha);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.isha
+        ..time = today.isha);
     }
 
-    return new Prayer(PrayerType.imsak, tomorrow.imsak);
+    return Prayer((PrayerBuilder b) => b
+      ..type = PrayerType.imsak
+      ..time = tomorrow.imsak);
   }
 
   ///
@@ -332,38 +404,56 @@ class _PrayerCalculator {
     final Prayers tomorrow = getPrayerTimesForOneDay(now.add(const Duration(days: 1)), settings, coordinate, timeZone);
 
     if (now.isBefore(today.imsak)) {
-      return new Prayer(PrayerType.fajr, today.fajr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.fajr
+        ..time = today.fajr);
     }
 
     if (now.isBefore(today.fajr)) {
-      return new Prayer(PrayerType.sunrise, today.sunrise);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.sunrise
+        ..time = today.sunrise);
     }
 
     if (now.isBefore(today.sunrise)) {
-      return new Prayer(PrayerType.dhuha, today.dhuha);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.dhuha
+        ..time = today.dhuha);
     }
 
     if (now.isBefore(today.dhuha)) {
-      return new Prayer(PrayerType.dhuhr, today.dhuhr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.dhuhr
+        ..time = today.dhuhr);
     }
 
     if (now.isBefore(today.dhuhr)) {
-      return new Prayer(PrayerType.asr, today.asr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.asr
+        ..time = today.asr);
     }
 
     if (now.isBefore(today.asr)) {
-      return new Prayer(PrayerType.maghrib, today.maghrib);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.maghrib
+        ..time = today.maghrib);
     }
 
     if (now.isBefore(today.maghrib)) {
-      return new Prayer(PrayerType.isha, today.isha);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.isha
+        ..time = today.isha);
     }
 
     if (now.isBefore(today.isha)) {
-      return new Prayer(PrayerType.imsak, tomorrow.imsak);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.imsak
+        ..time = tomorrow.imsak);
     }
 
-    return new Prayer(PrayerType.fajr, tomorrow.fajr);
+    return Prayer((PrayerBuilder b) => b
+      ..type = PrayerType.fajr
+      ..time = tomorrow.fajr);
   }
 
   ///
@@ -375,56 +465,74 @@ class _PrayerCalculator {
     final Prayers tomorrow = getPrayerTimesForOneDay(now.add(const Duration(days: 1)), settings, coordinate, timeZone);
 
     if (now.isBefore(today.imsak)) {
-      return new Prayer(PrayerType.sunrise, today.sunrise);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.sunrise
+        ..time = today.sunrise);
     }
 
     if (now.isBefore(today.fajr)) {
-      return new Prayer(PrayerType.dhuha, today.dhuha);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.dhuha
+        ..time = today.dhuha);
     }
 
     if (now.isBefore(today.sunrise)) {
-      return new Prayer(PrayerType.dhuhr, today.dhuhr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.dhuhr
+        ..time = today.dhuhr);
     }
 
     if (now.isBefore(today.dhuha)) {
-      return new Prayer(PrayerType.asr, today.asr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.asr
+        ..time = today.asr);
     }
 
     if (now.isBefore(today.dhuhr)) {
-      return new Prayer(PrayerType.maghrib, today.maghrib);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.maghrib
+        ..time = today.maghrib);
     }
 
     if (now.isBefore(today.asr)) {
-      return new Prayer(PrayerType.isha, today.isha);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.isha
+        ..time = today.isha);
     }
 
     if (now.isBefore(today.maghrib)) {
-      return new Prayer(PrayerType.imsak, tomorrow.imsak);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.imsak
+        ..time = tomorrow.imsak);
     }
 
     if (now.isBefore(today.isha)) {
-      return new Prayer(PrayerType.fajr, tomorrow.fajr);
+      return Prayer((PrayerBuilder b) => b
+        ..type = PrayerType.fajr
+        ..time = tomorrow.fajr);
     }
 
-    return new Prayer(PrayerType.sunrise, tomorrow.sunrise);
+    return Prayer((PrayerBuilder b) => b
+      ..type = PrayerType.sunrise
+      ..time = tomorrow.sunrise);
   }
 
   ///
   /// Compute all prayer times at given Julian Date and return the raw results.
   ///
   static _PrayersInDouble _computeRaw(double jd, PrayerCalculationSettings settings, double latitude, double altitude) {
-    final _PrayersInDouble raw = new _PrayersInDouble();
+    final _PrayersInDouble raw = _PrayersInDouble();
 
     // Compute imsak.
     if (settings.imsakParameter.type == PrayerCalculationParameterType.angle) {
       // raw.imsak = _computeImsakTime(jd, settings.imsakParameter.value, latitude);
       // NOTE: Do imsak time can be calculated using angle parameter?
-      throw new _PrayerCalculatorError('Imsak calculation parameter type must be the type of minute adjust.');
+      throw _PrayerCalculatorError('Imsak calculation parameter type must be the type of minute adjust.');
     }
 
     // Check fajr parameter type.
     if (settings.calculationMethod.fajrParameter.type == PrayerCalculationParameterType.minutesAdjust) {
-      throw new _PrayerCalculatorError('Fajr calculation parameter type must be the type of angle.');
+      throw _PrayerCalculatorError('Fajr calculation parameter type must be the type of angle.');
     }
 
     // Compute fajr, sunrise, dhuha, dhuhr, asr and sunset.
@@ -721,18 +829,18 @@ class _PrayerCalculator {
   /// Convert [_PrayersInDouble] to [Prayers].
   ///
   static Prayers _convertFromFloatingPointFormat(int year, int month, int day, _PrayersInDouble prayers) {
-    final DateTime date = new DateTime(year, month, day);
-    return new Prayers._(
-        date.add(new Duration(microseconds: (prayers.imsak * _kMicrosecondsInAnHour).round())),
-        date.add(new Duration(microseconds: (prayers.fajr * _kMicrosecondsInAnHour).round())),
-        date.add(new Duration(microseconds: (prayers.sunrise * _kMicrosecondsInAnHour).round())),
-        date.add(new Duration(microseconds: (prayers.dhuha * _kMicrosecondsInAnHour).round())),
-        date.add(new Duration(microseconds: (prayers.dhuhr * _kMicrosecondsInAnHour).round())),
-        date.add(new Duration(microseconds: (prayers.asr * _kMicrosecondsInAnHour).round())),
-        date.add(new Duration(microseconds: (prayers.sunset * _kMicrosecondsInAnHour).round())),
-        date.add(new Duration(microseconds: (prayers.maghrib * _kMicrosecondsInAnHour).round())),
-        date.add(new Duration(microseconds: (prayers.isha * _kMicrosecondsInAnHour).round())),
-        date.add(new Duration(microseconds: (prayers.midnight * _kMicrosecondsInAnHour).round())));
+    final DateTime date = DateTime(year, month, day);
+    return Prayers((PrayersBuilder b) => b
+      ..imsak = date.add(Duration(microseconds: (prayers.imsak * _kMicrosecondsInAnHour).round()))
+      ..fajr = date.add(Duration(microseconds: (prayers.fajr * _kMicrosecondsInAnHour).round()))
+      ..sunrise = date.add(Duration(microseconds: (prayers.sunrise * _kMicrosecondsInAnHour).round()))
+      ..dhuha = date.add(Duration(microseconds: (prayers.dhuha * _kMicrosecondsInAnHour).round()))
+      ..dhuhr = date.add(Duration(microseconds: (prayers.dhuhr * _kMicrosecondsInAnHour).round()))
+      ..asr = date.add(Duration(microseconds: (prayers.asr * _kMicrosecondsInAnHour).round()))
+      ..sunset = date.add(Duration(microseconds: (prayers.sunset * _kMicrosecondsInAnHour).round()))
+      ..maghrib = date.add(Duration(microseconds: (prayers.maghrib * _kMicrosecondsInAnHour).round()))
+      ..isha = date.add(Duration(microseconds: (prayers.isha * _kMicrosecondsInAnHour).round()))
+      ..midnight = date.add(Duration(microseconds: (prayers.midnight * _kMicrosecondsInAnHour).round())));
   }
 
   ///
@@ -741,26 +849,24 @@ class _PrayerCalculator {
   /// minute component is added with one.
   ///
   static DateTime _roundPrayerTime(DateTime time) {
-    final DateTime withoutSecond = new DateTime(time.year, time.month, time.day, time.hour, time.minute);
+    final DateTime withoutSecond = DateTime(time.year, time.month, time.day, time.hour, time.minute);
     if (time.second == 0) {
       return withoutSecond;
     }
 
     final int diff = time.difference(withoutSecond).inSeconds;
-    final Duration toAdd = new Duration(seconds: 60 - diff);
+    final Duration toAdd = Duration(seconds: 60 - diff);
 
     final DateTime newTime = time.add(toAdd);
-    return new DateTime(newTime.year, newTime.month, newTime.day, newTime.hour, newTime.minute);
+    return DateTime(newTime.year, newTime.month, newTime.day, newTime.hour, newTime.minute);
   }
-
-/* END METHOD SECTION */
 }
 
 ///
 /// Prayer times data for a single day in floating point format.
 ///
 class _PrayersInDouble {
-  /* BEGIN FIELD SECTION */
+  // ------------------------------- FIELDS -------------------------------
 
   /// Imsak prayer time in floating point format.
   double imsak;
@@ -791,50 +897,49 @@ class _PrayersInDouble {
 
   /// Midnight time in floating point format.
   double midnight;
-
-/* END FIELD SECTION */
 }
 
 ///
 /// Contains error information thrown by prayer times calculator methods.
 ///
 class _PrayerCalculatorError extends Error {
-  /* BEGIN FIELD SECTION */
+  // ------------------------------- FIELDS -------------------------------
 
   /// Brief message which tells why the error occured.
   final String reason;
 
-  /* END FIELD SECTION */
-  /* BEGIN CONSTRUCTOR SECTION */
+  // ---------------------------- CONSTRUCTORS ----------------------------
 
   ///
-  /// Create new [_PrayerCalculatorError].
+  /// Create [_PrayerCalculatorError].
   ///
   _PrayerCalculatorError(this.reason);
-
-/* END CONSTRUCTOR SECTION */
 }
 
 ///
 /// Contains method for getting current date and time.
 ///
 class Clock {
+  // ---------------------------- CONSTRUCTORS ----------------------------
+
   ///
-  /// Create new [Clock].
+  /// Create [Clock].
   ///
   const Clock();
+
+  // ------------------------------- METHODS ------------------------------
 
   ///
   /// Gets the current local date and time.
   ///
   DateTime now() {
-    return new DateTime.now();
+    return DateTime.now();
   }
 
   ///
   /// Gets the current UTC date and time.
   ///
   DateTime utcNow() {
-    return new DateTime.now().toUtc();
+    return DateTime.now().toUtc();
   }
 }

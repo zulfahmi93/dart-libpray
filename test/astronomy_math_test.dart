@@ -8,7 +8,7 @@ void testAstronomyMath() {
     //   - Date: April 12th, 2018 at UTC.
     //   - Sunrise hour: 5.936050578361192.
     //   - Sunset hour: 18.09359586584113.
-    // final DateTime date = new DateTime.utc(2018, 4, 12);
+    // final DateTime date = DateTime.utc(2018, 4, 12);
     const double jd = 2458220.2194444444;
     // const double sunrise = 5.936050578361192;
     // const double sunset = 18.09359586584113;
@@ -54,7 +54,7 @@ void _testGetNightFraction(double diff) {
   test('Test get night fraction for high latitude adjustment of none should throw error.', () {
     expect(() {
       getNightFraction(HighLatitudeAdjustment.none, null, null);
-    }, throwsA(const isInstanceOf<ArgumentError>()));
+    }, throwsA(const TypeMatcher<ArgumentError>()));
   });
 
   test('Test get night fraction for high latitude adjustment of middle of night with diff $diff should equals 5.92122735626003.', () {

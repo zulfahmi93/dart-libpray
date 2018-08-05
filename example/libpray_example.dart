@@ -5,20 +5,22 @@ void main() {
   const int year = 2018;
   const int month = 4;
   const int day = 12;
-  final DateTime when = new DateTime.utc(year, month, day);
+  final DateTime when = DateTime.utc(year, month, day);
 
   // Init settings.
-  final PrayerCalculationSettings settings = new PrayerCalculationSettings();
-
   // Set calculation method to JAKIM (Fajr: 18.0 and Isha: 20.0).
-  settings.calculationMethod.setCalculationMethodPreset(when, CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia);
+  final PrayerCalculationSettings settings = PrayerCalculationSettings((PrayerCalculationSettingsBuilder b) =>
+      b..calculationMethod.replace(CalculationMethod.fromPreset(preset: CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia)));
 
   // Init location info.
-  const Geocoordinate geo = const Geocoordinate(2.0, 101.0, 2.0);
+  final Geocoordinate geo = Geocoordinate((GeocoordinateBuilder b) => b
+    ..latitude = 2.0
+    ..longitude = 101.0
+    ..altitude = 2.0);
   const double timezone = 8.0;
 
   // Generate prayer times for one day on April 12th, 2018.
-  final Prayers prayers = Prayers.on(when, settings, geo, timezone);
+  final Prayers prayers = Prayers.on(date: when, settings: settings, coordinate: geo, timeZone: timezone);
   print(prayers.imsak);
   print(prayers.fajr);
   print(prayers.sunrise);
@@ -31,18 +33,18 @@ void main() {
   print(prayers.midnight);
 
   // Generate current prayer time
-  final Prayer current = Prayer.now(settings, geo, timezone);
+  final Prayer current = Prayer.now(settings: settings, coordinate: geo, timeZone: timezone);
   print('${current.type}: ${current.time}');
 
   // Generate next prayer time
-  final Prayer next = Prayer.next(settings, geo, timezone);
+  final Prayer next = Prayer.next(settings: settings, coordinate: geo, timeZone: timezone);
   print('${next.type}: ${next.time}');
 
   // Generate later prayer time
-  final Prayer later = Prayer.later(settings, geo, timezone);
+  final Prayer later = Prayer.later(settings: settings, coordinate: geo, timeZone: timezone);
   print('${later.type}: ${later.time}');
 
   // Generate after later prayer time
-  final Prayer afterLater = Prayer.afterLater(settings, geo, timezone);
+  final Prayer afterLater = Prayer.afterLater(settings: settings, coordinate: geo, timeZone: timezone);
   print('${afterLater.type}: ${afterLater.time}');
 }

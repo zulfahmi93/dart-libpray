@@ -1,443 +1,410 @@
-import 'package:meta/meta.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:libcalendar/libcalendar.dart';
-import 'package:libpray/src/maths/constants.dart';
-import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
+
+part 'calculation_method.g.dart';
 
 ///
 /// Provides properties for holding information used for calculating subuh,
 /// maghrib and isyak prayers. Provides methods for getting and setting the
 /// prayer times calculation method parameter.
 ///
-class CalculationMethod {
-  /* BEGIN FIELD SECTION */
-
-  final Logger _log = new Logger('CalculationMethod');
-  CalculationMethodPreset _preset;
-  PrayerCalculationParameter _fajrParameter;
-  PrayerCalculationParameter _maghribParameter;
-  PrayerCalculationParameter _ishaParameter;
-  Midnight _midnight;
-
-  /* END FIELD SECTION */
-  /* BEGIN CONSTRUCTOR SECTION */
+abstract class CalculationMethod implements Built<CalculationMethod, CalculationMethodBuilder> {
+  // ---------------------------- CONSTRUCTORS ----------------------------
 
   ///
-  /// Create new [CalculationMethod].
+  /// Create [CalculationMethod].
   ///
-  CalculationMethod() {
-    setCalculationMethodPreset(new DateTime.now().toUtc(), CalculationMethodPreset.ummAlQuraUniversity);
-  }
-
-  /* END CONSTRUCTOR SECTION */
-  /* BEGIN PROPERTY SECTION */
+  factory CalculationMethod([updates(CalculationMethodBuilder b)]) = _$CalculationMethod;
 
   ///
-  /// Gets the calculation method preset.
+  /// Create [CalculationMethod].
   ///
-  CalculationMethodPreset get preset => _preset;
-
-  ///
-  /// Gets the calculation parameter for fajr prayer.
-  ///
-  PrayerCalculationParameter get fajrParameter => _fajrParameter;
-
-  ///
-  /// Gets the calculation parameter for maghrib prayer.
-  ///
-  PrayerCalculationParameter get maghribParameter => _maghribParameter;
-
-  ///
-  /// Gets the calculation parameter for isha prayer.
-  ///
-  PrayerCalculationParameter get ishaParameter => _ishaParameter;
-
-  ///
-  /// Gets the calculation parameter for midnight.
-  ///
-  Midnight get midnight => _midnight;
-
-  /* END PROPERTY SECTION */
-  /* BEGIN METHOD SECTION */
-
-  ///
-  /// Gets the [CalculationMethodPreset] enumeration value which agrees to
-  /// calculation method parameters held by current instance of
-  /// [CalculationMethod] object.
-  ///
-  CalculationMethodPreset getCalculationMethodPreset() {
-    _log.fine('Getting calculation method preset.');
-
-    //
-    // JAKIM.
-    if (preset == CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia) {
-      return CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia;
-    }
-
-    //
-    // Ithna Ashari
-    if (((_fajrParameter.value - 16.0).abs() < Tolerance.course) &&
-        (_fajrParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_maghribParameter.value - 4.0).abs() < Tolerance.course) &&
-        (_maghribParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_ishaParameter.value - 14.0).abs() < Tolerance.course) &&
-        (_ishaParameter._type == PrayerCalculationParameterType.angle) &&
-        (_midnight == Midnight.jafari)) {
-      _log.fine('Ithna Ashari calculation method preset returned.');
-      _preset = CalculationMethodPreset.ithnaAshari;
-      return CalculationMethodPreset.ithnaAshari;
-    }
-
-    //
-    // University of Islamic Sciences, Karachi
-    if (((_fajrParameter.value - 18.0).abs() < Tolerance.course) &&
-        (_fajrParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_maghribParameter.value - 0.0).abs() < Tolerance.course) &&
-        (_maghribParameter._type == PrayerCalculationParameterType.minutesAdjust) &&
-        ((_ishaParameter.value - 18.0).abs() < Tolerance.course) &&
-        (_ishaParameter._type == PrayerCalculationParameterType.angle) &&
-        (_midnight == Midnight.standard)) {
-      _log.fine('University of Islamic Sciences, Karachi calculation method preset returned.');
-      _preset = CalculationMethodPreset.universityOfIslamicSciencesKarachi;
-      return CalculationMethodPreset.universityOfIslamicSciencesKarachi;
-    }
-
-    //
-    // Islamic Society of North America
-    if (((_fajrParameter.value - 15.0).abs() < Tolerance.course) &&
-        (_fajrParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_maghribParameter.value - 0.0).abs() < Tolerance.course) &&
-        (_maghribParameter._type == PrayerCalculationParameterType.minutesAdjust) &&
-        ((_ishaParameter.value - 15.0).abs() < Tolerance.course) &&
-        (_ishaParameter._type == PrayerCalculationParameterType.angle) &&
-        (_midnight == Midnight.standard)) {
-      _log.fine('Islamic Society of North America calculation method preset returned.');
-      _preset = CalculationMethodPreset.islamicSocietyOfNorthAmerica;
-      return CalculationMethodPreset.islamicSocietyOfNorthAmerica;
-    }
-
-    //
-    // Muslim World League
-    if (((_fajrParameter.value - 18.0).abs() < Tolerance.course) &&
-        (_fajrParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_maghribParameter.value - 0.0).abs() < Tolerance.course) &&
-        (_maghribParameter._type == PrayerCalculationParameterType.minutesAdjust) &&
-        ((_ishaParameter.value - 17.0).abs() < Tolerance.course) &&
-        (_ishaParameter._type == PrayerCalculationParameterType.angle) &&
-        (_midnight == Midnight.standard)) {
-      _log.fine('Muslim World League calculation method preset returned.');
-      _preset = CalculationMethodPreset.muslimWorldLeague;
-      return CalculationMethodPreset.muslimWorldLeague;
-    }
-
-    //
-    // Umm Al-Qura University, Makkah
-    if ((((_fajrParameter.value - 19.0).abs() < Tolerance.course) || ((_fajrParameter.value - 18.5).abs() < Tolerance.course)) &&
-        (_fajrParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_maghribParameter.value - 0.0).abs() < Tolerance.course) &&
-        (_maghribParameter._type == PrayerCalculationParameterType.minutesAdjust) &&
-        (((_ishaParameter.value - 90.0).abs() < Tolerance.course) || ((_ishaParameter.value - 120.0).abs() < Tolerance.course)) &&
-        (_ishaParameter._type == PrayerCalculationParameterType.minutesAdjust) &&
-        (_midnight == Midnight.standard)) {
-      _log.fine('Umm Al-Qura University, Makkah calculation method preset returned.');
-      _preset = CalculationMethodPreset.ummAlQuraUniversity;
-      return CalculationMethodPreset.ummAlQuraUniversity;
-    }
-
-    //
-    // Egyptian General Authority of Survey
-    if (((_fajrParameter.value - 19.5).abs() < Tolerance.course) &&
-        (_fajrParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_maghribParameter.value - 0.0).abs() < Tolerance.course) &&
-        (_maghribParameter._type == PrayerCalculationParameterType.minutesAdjust) &&
-        ((_ishaParameter.value - 17.5).abs() < Tolerance.course) &&
-        (_ishaParameter._type == PrayerCalculationParameterType.angle) &&
-        (_midnight == Midnight.standard)) {
-      _log.fine('Egyptian General Authority of Survey calculation method preset returned.');
-      _preset = CalculationMethodPreset.egyptianGeneralAuthorityOfSurvey;
-      return CalculationMethodPreset.egyptianGeneralAuthorityOfSurvey;
-    }
-
-    //
-    // Union des Organisations Islamiques de France
-    if (((_fajrParameter.value - 12.0).abs() < Tolerance.course) &&
-        (_fajrParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_maghribParameter.value - 0.0).abs() < Tolerance.course) &&
-        (_maghribParameter._type == PrayerCalculationParameterType.minutesAdjust) &&
-        ((_ishaParameter.value - 12.0).abs() < Tolerance.course) &&
-        (_ishaParameter._type == PrayerCalculationParameterType.angle) &&
-        (_midnight == Midnight.standard)) {
-      _log.fine('Union des Organisations Islamiques de France calculation method preset returned.');
-      _preset = CalculationMethodPreset.unionDesOrganisationsIslamiquesDeFrance;
-      return CalculationMethodPreset.unionDesOrganisationsIslamiquesDeFrance;
-    }
-
-    //
-    // Majlis Ugama Islam Singapura
-    if (((_fajrParameter.value - 20.0).abs() < Tolerance.course) &&
-        (_fajrParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_maghribParameter.value - 0.0).abs() < Tolerance.course) &&
-        (_maghribParameter._type == PrayerCalculationParameterType.minutesAdjust) &&
-        ((_ishaParameter.value - 18.0).abs() < Tolerance.course) &&
-        (_ishaParameter._type == PrayerCalculationParameterType.angle) &&
-        (_midnight == Midnight.standard)) {
-      _log.fine('Majlis Ugama Islam Singapura calculation method preset returned.');
-      _preset = CalculationMethodPreset.majlisUgamaIslamSingapura;
-      return CalculationMethodPreset.majlisUgamaIslamSingapura;
-    }
-
-    //
-    // Institute of Geophysics, University of Tehran
-    if (((_fajrParameter.value - 17.7).abs() < Tolerance.course) &&
-        (_fajrParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_maghribParameter.value - 4.5).abs() < Tolerance.course) &&
-        (_maghribParameter._type == PrayerCalculationParameterType.angle) &&
-        ((_ishaParameter.value - 14.0).abs() < Tolerance.course) &&
-        (_ishaParameter._type == PrayerCalculationParameterType.angle) &&
-        (_midnight == Midnight.jafari)) {
-      _log.fine('Institute of Geophysics, University of Tehran calculation method preset returned.');
-      _preset = CalculationMethodPreset.instituteOfGeophysicsUniversityOfTehran;
-      return CalculationMethodPreset.instituteOfGeophysicsUniversityOfTehran;
-    }
-
-    //
-    // Custom.
-    _preset = CalculationMethodPreset.custom;
-    return CalculationMethodPreset.custom;
+  factory CalculationMethod.fromPreset({@required CalculationMethodPreset preset, DateTime when}) {
+    return preset.getCalculationMethod(when);
   }
 
   ///
-  /// Sets the calculation method parameters from given method preset.
+  /// Create [CalculationMethod].
   ///
-  void setCalculationMethodPreset(DateTime dateInUtc, CalculationMethodPreset preset) {
-    assert(dateInUtc != null);
-    assert(preset != null);
-    //
-    // Umm Al-Qura University, Makkah
-    if (preset == CalculationMethodPreset.ummAlQuraUniversity) {
-      // Only check for date for Umm Al-Qura University, Makkah.
-      if (!dateInUtc.isUtc) {
-        throw new ArgumentError.value(dateInUtc, 'dateInUtc', 'Value of parameter [dateInUtc] should be in UTC.');
-      }
-
-      _log.fine('Configuring Ummul Qura calculation method.');
-
-      // Convert Gregorian date to Hijri.
-      final DateTime hijri = fromGregorianToIslamic(dateInUtc.year, dateInUtc.month, dateInUtc.day);
-      final bool isBefore1430H = hijri.year < 1430;
-      final bool isRamadhan = hijri.month == 9;
-
-      _preset = CalculationMethodPreset.ummAlQuraUniversity;
-      _fajrParameter = new PrayerCalculationParameter(isBefore1430H ? 19.0 : 18.5, PrayerCalculationParameterType.angle);
-      _maghribParameter = const PrayerCalculationParameter(0.0, PrayerCalculationParameterType.minutesAdjust);
-      _ishaParameter = new PrayerCalculationParameter(isRamadhan ? 120.0 : 90.0, PrayerCalculationParameterType.minutesAdjust);
-      _midnight = Midnight.standard;
-      return;
-    }
-
-    switch (preset) {
-      case CalculationMethodPreset.ithnaAshari:
-        _log.fine('Setting calculation method to Ithna Ashari.');
-        _preset = CalculationMethodPreset.ithnaAshari;
-        _fajrParameter = const PrayerCalculationParameter(16.0, PrayerCalculationParameterType.angle);
-        _maghribParameter = const PrayerCalculationParameter(4.0, PrayerCalculationParameterType.angle);
-        _ishaParameter = const PrayerCalculationParameter(14.0, PrayerCalculationParameterType.angle);
-        _midnight = Midnight.jafari;
-        return;
-
-      case CalculationMethodPreset.universityOfIslamicSciencesKarachi:
-        _log.fine('Setting calculation method to University of Islamic Sciences, Karachi.');
-        _preset = CalculationMethodPreset.universityOfIslamicSciencesKarachi;
-        _fajrParameter = const PrayerCalculationParameter(18.0, PrayerCalculationParameterType.angle);
-        _maghribParameter = const PrayerCalculationParameter(0.0, PrayerCalculationParameterType.minutesAdjust);
-        _ishaParameter = const PrayerCalculationParameter(18.0, PrayerCalculationParameterType.angle);
-        _midnight = Midnight.standard;
-        return;
-
-      case CalculationMethodPreset.islamicSocietyOfNorthAmerica:
-        _log.fine('Setting calculation method to Islamic Society of North America.');
-        _preset = CalculationMethodPreset.islamicSocietyOfNorthAmerica;
-        _fajrParameter = const PrayerCalculationParameter(15.0, PrayerCalculationParameterType.angle);
-        _maghribParameter = const PrayerCalculationParameter(0.0, PrayerCalculationParameterType.minutesAdjust);
-        _ishaParameter = const PrayerCalculationParameter(15.0, PrayerCalculationParameterType.angle);
-        _midnight = Midnight.standard;
-        return;
-
-      case CalculationMethodPreset.muslimWorldLeague:
-        _log.fine('Setting calculation method to Muslim World League.');
-        _preset = CalculationMethodPreset.muslimWorldLeague;
-        _fajrParameter = const PrayerCalculationParameter(18.0, PrayerCalculationParameterType.angle);
-        _maghribParameter = const PrayerCalculationParameter(0.0, PrayerCalculationParameterType.minutesAdjust);
-        _ishaParameter = const PrayerCalculationParameter(17.0, PrayerCalculationParameterType.angle);
-        _midnight = Midnight.standard;
-        return;
-
-      case CalculationMethodPreset.egyptianGeneralAuthorityOfSurvey:
-        _log.fine('Setting calculation method to Egyptian General Authority of Survey.');
-        _preset = CalculationMethodPreset.egyptianGeneralAuthorityOfSurvey;
-        _fajrParameter = const PrayerCalculationParameter(19.5, PrayerCalculationParameterType.angle);
-        _maghribParameter = const PrayerCalculationParameter(0.0, PrayerCalculationParameterType.minutesAdjust);
-        _ishaParameter = const PrayerCalculationParameter(17.5, PrayerCalculationParameterType.angle);
-        _midnight = Midnight.standard;
-        return;
-
-      case CalculationMethodPreset.instituteOfGeophysicsUniversityOfTehran:
-        _log.fine('Setting calculation method to Institute of Geophysics, University of Tehran.');
-        _preset = CalculationMethodPreset.instituteOfGeophysicsUniversityOfTehran;
-        _fajrParameter = const PrayerCalculationParameter(17.7, PrayerCalculationParameterType.angle);
-        _maghribParameter = const PrayerCalculationParameter(4.5, PrayerCalculationParameterType.angle);
-        _ishaParameter = const PrayerCalculationParameter(14.0, PrayerCalculationParameterType.angle);
-        _midnight = Midnight.jafari;
-        return;
-
-      case CalculationMethodPreset.unionDesOrganisationsIslamiquesDeFrance:
-        _log.fine('Setting calculation method to Union des Organisations Islamiques de France.');
-        _preset = CalculationMethodPreset.unionDesOrganisationsIslamiquesDeFrance;
-        _fajrParameter = const PrayerCalculationParameter(12.0, PrayerCalculationParameterType.angle);
-        _maghribParameter = const PrayerCalculationParameter(0.0, PrayerCalculationParameterType.minutesAdjust);
-        _ishaParameter = const PrayerCalculationParameter(12.0, PrayerCalculationParameterType.angle);
-        _midnight = Midnight.standard;
-        return;
-
-      case CalculationMethodPreset.majlisUgamaIslamSingapura:
-        _log.fine('Setting calculation method to Majlis Ugama Islam Singapura.');
-        _preset = CalculationMethodPreset.majlisUgamaIslamSingapura;
-        _fajrParameter = const PrayerCalculationParameter(20.0, PrayerCalculationParameterType.angle);
-        _maghribParameter = const PrayerCalculationParameter(0.0, PrayerCalculationParameterType.minutesAdjust);
-        _ishaParameter = const PrayerCalculationParameter(18.0, PrayerCalculationParameterType.angle);
-        _midnight = Midnight.standard;
-        return;
-
-      case CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia:
-        _log.fine('Setting calculation method to Department of Islamic Advancement, Malaysia.');
-        _preset = CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia;
-        _fajrParameter = const PrayerCalculationParameter(20.0, PrayerCalculationParameterType.angle);
-        _maghribParameter = const PrayerCalculationParameter(0.0, PrayerCalculationParameterType.minutesAdjust);
-        _ishaParameter = const PrayerCalculationParameter(18.0, PrayerCalculationParameterType.angle);
-        _midnight = Midnight.standard;
-        return;
-
-      default:
-        throw new ArgumentError.value(preset, 'preset', 'Parameter [preset] contains an invalid value.');
-    }
+  factory CalculationMethod.custom(
+      {@required double fajrAngleParameter,
+      @required double maghribParameter,
+      @required PrayerCalculationParameterType maghribParameterType,
+      @required double ishaParameter,
+      @required PrayerCalculationParameterType ishaParameterType,
+      @required Midnight midnight}) {
+    return CalculationMethod((CalculationMethodBuilder b) => b
+      ..preset = CalculationMethodPreset.custom
+      ..fajrParameter.type = PrayerCalculationParameterType.angle
+      ..fajrParameter.value = fajrAngleParameter
+      ..maghribParameter.type = maghribParameterType
+      ..maghribParameter.value = maghribParameter
+      ..ishaParameter.type = ishaParameterType
+      ..ishaParameter.value = ishaParameter
+      ..midnight = midnight);
   }
 
   ///
-  /// Sets the calculation method parameters using custom parameters.
+  /// Create [CalculationMethod].
   ///
-  void setCustomCalculationMethod(double fajrAngleParameter, double maghribParameter, PrayerCalculationParameterType maghribParameterType, double ishaParameter,
-      PrayerCalculationParameterType ishaParameterType, Midnight midnight) {
-    assert(fajrAngleParameter != null);
-    assert(maghribParameter != null);
-    assert(maghribParameterType != null);
-    assert(ishaParameter != null);
-    assert(ishaParameterType != null);
-    assert(midnight != null);
+  CalculationMethod._();
 
-    _log.fine('Configuring custom calculation method parameters.');
+  // ----------------------------- SERIALIZER -----------------------------
 
-    _preset = CalculationMethodPreset.custom;
-    _fajrParameter = new PrayerCalculationParameter(fajrAngleParameter, PrayerCalculationParameterType.angle);
-    _maghribParameter = new PrayerCalculationParameter(maghribParameter, maghribParameterType);
-    _ishaParameter = new PrayerCalculationParameter(ishaParameter, ishaParameterType);
-    _midnight = midnight;
-  }
+  /// [Serializer] for this object.
+  static Serializer<CalculationMethod> get serializer => _$calculationMethodSerializer;
 
-/* END METHOD SECTION */
+  // ----------------------------- PROPERTIES -----------------------------
+
+  /// Calculation method preset.
+  CalculationMethodPreset get preset;
+
+  /// Calculation parameter for fajr prayer.
+  PrayerCalculationParameter get fajrParameter;
+
+  /// Calculation parameter for maghrib prayer.
+  PrayerCalculationParameter get maghribParameter;
+
+  /// Calculation parameter for isha prayer.
+  PrayerCalculationParameter get ishaParameter;
+
+  /// Calculation method for midnight.
+  Midnight get midnight;
 }
 
 ///
 /// Represents the type of prayer times calculation parameter.
 ///
-enum PrayerCalculationParameterType {
+class PrayerCalculationParameterType extends EnumClass {
+  // --------------------------- ENUM CONSTANTS ---------------------------
+
   /// Represents parameter which uses minute adjustment.
-  minutesAdjust,
+  static const PrayerCalculationParameterType minutesAdjust = _$minutesAdjust;
 
   /// Represents parameter which calculate prayer time using angle value.
-  angle
+  static const PrayerCalculationParameterType angle = _$angle;
+
+  // ---------------------------- CONSTRUCTORS ----------------------------
+
+  ///
+  /// Create [PrayerCalculationParameterType].
+  ///
+  const PrayerCalculationParameterType._(String name) : super(name);
+
+  // ----------------------------- PROPERTIES -----------------------------
+
+  /// All valid values for [PrayerCalculationParameterType].
+  static BuiltSet<PrayerCalculationParameterType> get values => _$valuesPCPT;
+
+  /// Gets the corresponding [PrayerCalculationParameterType] value for given [name].
+  static PrayerCalculationParameterType valueOf(String name) => _$valueOfPCPT(name);
+
+  // ----------------------------- SERIALIZER -----------------------------
+
+  /// [Serializer] for this object.
+  static Serializer<PrayerCalculationParameterType> get serializer => _$prayerCalculationParameterTypeSerializer;
 }
 
 ///
 /// Holds the calculation parameter used for prayer times calculation.
 ///
-@immutable
-class PrayerCalculationParameter {
-  /* BEGIN FIELD SECTION */
+abstract class PrayerCalculationParameter implements Built<PrayerCalculationParameter, PrayerCalculationParameterBuilder> {
+  // ---------------------------- CONSTRUCTORS ----------------------------
+
+  ///
+  /// Create [PrayerCalculationParameter].
+  ///
+  factory PrayerCalculationParameter([updates(PrayerCalculationParameterBuilder b)]) = _$PrayerCalculationParameter;
+
+  ///
+  /// Create [PrayerCalculationParameter].
+  ///
+  PrayerCalculationParameter._();
+
+  // ----------------------------- SERIALIZER -----------------------------
+
+  /// [Serializer] for this object.
+  static Serializer<PrayerCalculationParameter> get serializer => _$prayerCalculationParameterSerializer;
+
+  // ----------------------------- PROPERTIES -----------------------------
 
   /// Type of the prayer times calculation parameter.
-  final PrayerCalculationParameterType _type;
+  PrayerCalculationParameterType get type;
 
   /// Value of the prayer times calculation parameter.
-  final double _value;
-
-  /* END FIELD SECTION */
-  /* BEGIN CONSTRUCTOR SECTION */
-
-  ///
-  /// Create new [PrayerCalculationParameter].
-  ///
-  const PrayerCalculationParameter(this._value, this._type);
-
-  /* END CONSTRUCTOR SECTION */
-  /* BEGIN PROPERTY SECTION */
-
-  ///
-  /// Gets the value of the prayer times calculation parameter.
-  ///
-  PrayerCalculationParameterType get type => _type;
-
-  ///
-  /// Gets the type of the prayer times calculation parameter.
-  ///
-  double get value => _value;
-
-/* END PROPERTY SECTION */
+  double get value;
 }
 
 ///
 /// Calculation method preset.
 ///
-enum CalculationMethodPreset {
+class CalculationMethodPreset extends EnumClass {
+  // --------------------------- ENUM CONSTANTS ---------------------------
+
   /// Custom calculation method.
-  custom,
+  static const CalculationMethodPreset custom = _$custom;
 
   /// Ithna Ashari calculation method.
-  ithnaAshari,
+  static const CalculationMethodPreset ithnaAshari = _$ithnaAshari;
 
   /// University of Islamic Sciences, Karachi calculation method.
-  universityOfIslamicSciencesKarachi,
+  static const CalculationMethodPreset universityOfIslamicSciencesKarachi = _$universityOfIslamicSciencesKarachi;
 
   /// Islamic Society of North America calculation method.
-  islamicSocietyOfNorthAmerica,
+  static const CalculationMethodPreset islamicSocietyOfNorthAmerica = _$islamicSocietyOfNorthAmerica;
 
   /// Muslim World League calculation method.
-  muslimWorldLeague,
+  static const CalculationMethodPreset muslimWorldLeague = _$muslimWorldLeague;
 
   /// Umm Al-Qura University calculation method.
-  ummAlQuraUniversity,
+  static const CalculationMethodPreset ummAlQuraUniversity = _$ummAlQuraUniversity;
 
   /// Egyptian General Authority of Survey calculation method.
-  egyptianGeneralAuthorityOfSurvey,
+  static const CalculationMethodPreset egyptianGeneralAuthorityOfSurvey = _$egyptianGeneralAuthorityOfSurvey;
 
   /// Institute of Geophysics, University of Tehran calculation method.
-  instituteOfGeophysicsUniversityOfTehran,
+  static const CalculationMethodPreset instituteOfGeophysicsUniversityOfTehran = _$instituteOfGeophysicsUniversityOfTehran;
 
   /// Union Des Organisations Islamiques De France calculation method.
-  unionDesOrganisationsIslamiquesDeFrance,
+  static const CalculationMethodPreset unionDesOrganisationsIslamiquesDeFrance = _$unionDesOrganisationsIslamiquesDeFrance;
 
   /// Majlis Ugama Islam Singapura calculation method.
-  majlisUgamaIslamSingapura,
+  static const CalculationMethodPreset majlisUgamaIslamSingapura = _$majlisUgamaIslamSingapura;
 
   /// Department of Islamic Advancement of Malaysia calculation method.
-  departmentOfIslamicAdvancementOfMalaysia
+  static const CalculationMethodPreset departmentOfIslamicAdvancementOfMalaysia = _$departmentOfIslamicAdvancementOfMalaysia;
+
+  // ---------------------------- CONSTRUCTORS ----------------------------
+
+  ///
+  /// Create [CalculationMethodPreset].
+  ///
+  const CalculationMethodPreset._(String name) : super(name);
+
+  // ----------------------------- PROPERTIES -----------------------------
+
+  /// All valid values for [CalculationMethodPreset].
+  static BuiltSet<CalculationMethodPreset> get values => _$values;
+
+  /// Gets the corresponding [CalculationMethodPreset] value for given [name].
+  static CalculationMethodPreset valueOf(String name) => _$valueOf(name);
+
+  // ----------------------------- SERIALIZER -----------------------------
+
+  /// [Serializer] for this object.
+  static Serializer<CalculationMethodPreset> get serializer => _$calculationMethodPresetSerializer;
+
+  // ------------------------------- METHODS ------------------------------
+
+  ///
+  /// Gets the [CalculationMethod] for this preset.
+  ///
+  CalculationMethod getCalculationMethod(DateTime when) {
+    // Check if this a custom preset.
+    if (this == CalculationMethodPreset.custom) {
+      throw UnsupportedError('Custom calculation method preset is not supported.');
+    }
+
+    // Check for preset and date.
+    if (this == CalculationMethodPreset.ummAlQuraUniversity) {
+      if (when == null) {
+        throw ArgumentError.notNull('when');
+      }
+
+      if (!when.isUtc) {
+        throw ArgumentError.value(when, 'when', 'Value of parameter [when] should be in UTC.');
+      }
+    }
+
+    // Convert Gregorian date to Hijri.
+    final DateTime hijri = this == CalculationMethodPreset.ummAlQuraUniversity ? fromGregorianToIslamic(when.year, when.month, when.day) : null;
+
+    return CalculationMethod((CalculationMethodBuilder b) => b
+      ..preset = this
+      ..fajrParameter.replace(_getFajrAngleParameter(hijri))
+      ..maghribParameter.replace(_getMaghribParameter())
+      ..ishaParameter.replace(_getIshaParameter(hijri))
+      ..midnight = _getMidnight());
+  }
+
+  ///
+  /// Gets the fajr angle parameter on given [hijri] date for this preset.
+  ///
+  PrayerCalculationParameter _getFajrAngleParameter(DateTime hijri) {
+    const PrayerCalculationParameterType type = PrayerCalculationParameterType.angle;
+    double value;
+
+    switch (this) {
+      case CalculationMethodPreset.ithnaAshari:
+        value = 16.0;
+        break;
+
+      case CalculationMethodPreset.universityOfIslamicSciencesKarachi:
+      case CalculationMethodPreset.muslimWorldLeague:
+        value = 18.0;
+        break;
+
+      case CalculationMethodPreset.islamicSocietyOfNorthAmerica:
+        value = 15.0;
+        break;
+
+      case CalculationMethodPreset.ummAlQuraUniversity:
+        value = (hijri.year < 1430) ? 19.0 : 18.5;
+        break;
+
+      case CalculationMethodPreset.egyptianGeneralAuthorityOfSurvey:
+        value = 19.5;
+        break;
+
+      case CalculationMethodPreset.instituteOfGeophysicsUniversityOfTehran:
+        value = 17.7;
+        break;
+
+      case CalculationMethodPreset.unionDesOrganisationsIslamiquesDeFrance:
+        value = 12.0;
+        break;
+
+      case CalculationMethodPreset.majlisUgamaIslamSingapura:
+      case CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia:
+        value = 20.0;
+        break;
+    }
+
+    return PrayerCalculationParameter((PrayerCalculationParameterBuilder b) => b
+      ..type = type
+      ..value = value);
+  }
+
+  ///
+  /// Gets the maghrib parameter for this preset.
+  ///
+  PrayerCalculationParameter _getMaghribParameter() {
+    PrayerCalculationParameterType type;
+    double value;
+
+    switch (this) {
+      case CalculationMethodPreset.ithnaAshari:
+        type = PrayerCalculationParameterType.angle;
+        value = 4.0;
+        break;
+
+      case CalculationMethodPreset.universityOfIslamicSciencesKarachi:
+      case CalculationMethodPreset.islamicSocietyOfNorthAmerica:
+      case CalculationMethodPreset.muslimWorldLeague:
+      case CalculationMethodPreset.ummAlQuraUniversity:
+      case CalculationMethodPreset.egyptianGeneralAuthorityOfSurvey:
+      case CalculationMethodPreset.unionDesOrganisationsIslamiquesDeFrance:
+      case CalculationMethodPreset.majlisUgamaIslamSingapura:
+      case CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia:
+        type = PrayerCalculationParameterType.minutesAdjust;
+        value = 0.0;
+        break;
+
+      case CalculationMethodPreset.instituteOfGeophysicsUniversityOfTehran:
+        type = PrayerCalculationParameterType.angle;
+        value = 4.5;
+        break;
+    }
+
+    return PrayerCalculationParameter((PrayerCalculationParameterBuilder b) => b
+      ..type = type
+      ..value = value);
+  }
+
+  ///
+  /// Gets the isha parameter on given [hijri] date for this preset.
+  ///
+  PrayerCalculationParameter _getIshaParameter(DateTime hijri) {
+    PrayerCalculationParameterType type;
+    double value;
+
+    switch (this) {
+      case CalculationMethodPreset.ithnaAshari:
+      case CalculationMethodPreset.instituteOfGeophysicsUniversityOfTehran:
+        type = PrayerCalculationParameterType.angle;
+        value = 14.0;
+        break;
+
+      case CalculationMethodPreset.universityOfIslamicSciencesKarachi:
+      case CalculationMethodPreset.majlisUgamaIslamSingapura:
+      case CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia:
+        type = PrayerCalculationParameterType.angle;
+        value = 18.0;
+        break;
+
+      case CalculationMethodPreset.islamicSocietyOfNorthAmerica:
+        type = PrayerCalculationParameterType.angle;
+        value = 15.0;
+        break;
+
+      case CalculationMethodPreset.muslimWorldLeague:
+        type = PrayerCalculationParameterType.angle;
+        value = 17.0;
+        break;
+
+      case CalculationMethodPreset.ummAlQuraUniversity:
+        type = PrayerCalculationParameterType.minutesAdjust;
+        value = (hijri.month == 9) ? 120.0 : 90.0;
+        break;
+
+      case CalculationMethodPreset.egyptianGeneralAuthorityOfSurvey:
+        type = PrayerCalculationParameterType.angle;
+        value = 17.5;
+        break;
+
+      case CalculationMethodPreset.unionDesOrganisationsIslamiquesDeFrance:
+        type = PrayerCalculationParameterType.angle;
+        value = 12.0;
+        break;
+    }
+
+    return PrayerCalculationParameter((PrayerCalculationParameterBuilder b) => b
+      ..type = type
+      ..value = value);
+  }
+
+  ///
+  /// Gets the midnight method for this preset.
+  ///
+  Midnight _getMidnight() {
+    return ((this == CalculationMethodPreset.ithnaAshari) || (this == CalculationMethodPreset.instituteOfGeophysicsUniversityOfTehran))
+        ? Midnight.jafari
+        : Midnight.standard;
+  }
 }
 
 ///
 /// Represents the prayer times midnight method.
 ///
-enum Midnight {
+class Midnight extends EnumClass {
+  // --------------------------- ENUM CONSTANTS ---------------------------
+
   /// Standard method.
-  standard,
+  static const Midnight standard = _$standard;
 
   /// Jafari method.
-  jafari,
+  static const Midnight jafari = _$jafari;
+
+  // ---------------------------- CONSTRUCTORS ----------------------------
+
+  ///
+  /// Create [Midnight].
+  ///
+  const Midnight._(String name) : super(name);
+
+  // ----------------------------- PROPERTIES -----------------------------
+
+  /// All valid values for [Midnight].
+  static BuiltSet<Midnight> get values => _$valuesM;
+
+  /// Gets the corresponding [Midnight] value for given [name].
+  static Midnight valueOf(String name) => _$valueOfM(name);
+
+  // ----------------------------- SERIALIZER -----------------------------
+
+  /// [Serializer] for this object.
+  static Serializer<Midnight> get serializer => _$midnightSerializer;
 }

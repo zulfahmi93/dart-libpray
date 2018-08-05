@@ -48,7 +48,7 @@ double getNightFraction(HighLatitudeAdjustment method, double angle, double diff
       break;
 
     default:
-      throw new ArgumentError.value(method, 'method', 'Parameter [method] cannot has value of none.');
+      throw ArgumentError.value(method, 'method', 'Parameter [method] cannot has value of none.');
   }
 
   return nightFraction * diff;

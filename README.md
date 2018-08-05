@@ -2,12 +2,14 @@
 
 [![Pub](https://img.shields.io/pub/v/libpray.svg?style=flat-square)](https://pub.dartlang.org/packages/libpray)
 
+
+
 ## Quick Start
 
 1. Open your `pubspec.yaml` file and add this entry:
 
     ```yaml
-    libpray: ^0.0.2
+    libpray: ^0.1.0
     ```
 
 2. Then run `pub get`.
@@ -16,6 +18,20 @@
     ```dart
     import 'package:libpray/libpray.dart';
     ```
+
+
+
+## Building From Source
+
+### Dependencies
+
+1. Dart SDK version 2.0.0-dev.52.0 or newer.
+
+### Steps
+
+1. Clone this git repo into your machine.
+2. Run this command: `pub run build_runner build`
+
 
 
 ## How Prayer Times Are Calculated
@@ -236,6 +252,8 @@ diff = fajr - sunset
 midnight = sunset + (diff / 2)
 ```
 
+
+
 ## Example
 
 ```dart
@@ -246,10 +264,10 @@ void main() {
   const int year = 2018;
   const int month = 4;
   const int day = 12;
-  final DateTime when = new DateTime.utc(year, month, day);
+  final DateTime when = DateTime.utc(year, month, day);
 
   // Init settings.
-  final PrayerCalculationSettings settings = new PrayerCalculationSettings();
+  final PrayerCalculationSettings settings = PrayerCalculationSettings();
 
   // Set calculation method to JAKIM (Fajr: 18.0 and Isha: 20.0).
   settings.calculationMethod.setCalculationMethodPreset(when, CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia);
@@ -289,6 +307,8 @@ void main() {
 }
 ```
 
+
+
 ## References
 
 1. "Prayer Times Calculation", _Pray Times_, 2018. [Online]. Available: http://praytimes.org/calculation. [Accessed: 13- Apr- 2018].
@@ -305,9 +325,12 @@ void main() {
 
 7. "Tafsiran Astronomi Untuk Waktu Solat", _e-Solat: Sistem Panduan Solat_, 2014. [Online]. Available: http://www.e-solat.gov.my/web/index1.php?id=55&type=A. [Accessed: 13- Apr- 2018].
 
+
+
 ## Features and Bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
+
 
 
 ## License
