@@ -8,4 +8,6 @@ os:
 
 xvfb: false
 
-script: pub run build_runner build
+script:
+ - pub run build_runner build
+ - pub run test
