@@ -33,12 +33,12 @@ void testPrayers() {
 
 Clock _createMockClock() {
   final Clock mockClock = _MockClock();
-  when(mockClock.now()).thenReturn(DateTime.utc(2018, 4, 12));
+  when(mockClock.now()).thenReturn(DateTime(2018, 4, 12, 8));
   return mockClock;
 }
 
 void _testGetPrayerTimesForApril12th2018(DateTime date, PrayerCalculationSettings settings, Geocoordinate geo, double timeZone) {
-  test('Test get 1-day prayer times at [2, 101, 2] using JAKIM on April 12th, 2018.', () {
+  test('Test get 1-day prayer times at [2, 101, 2] using JAKIM on April 12th, 2018 at 8 AM.', () {
     final Prayers prayers = Prayers.on(date: date, settings: settings, coordinate: geo, timeZone: timeZone);
     expect(prayers.imsak, equals(DateTime(2018, 4, 12, 5, 45)));
     expect(prayers.fajr, equals(DateTime(2018, 4, 12, 5, 55)));
@@ -54,7 +54,7 @@ void _testGetPrayerTimesForApril12th2018(DateTime date, PrayerCalculationSetting
 }
 
 void _testGetPrayerTimesForToday(DateTime date, PrayerCalculationSettings settings, Geocoordinate geo, double timeZone, Clock clock) {
-  test('Test get today (mocked for April 12th, 2018) prayer times at [2, 101, 2] using JAKIM.', () {
+  test('Test get today (mocked for April 12th, 2018 at 8 AM) prayer times at [2, 101, 2] using JAKIM.', () {
     final Prayers prayers = Prayers.today(settings: settings, coordinate: geo, timeZone: timeZone, clock: clock);
     expect(prayers.imsak, equals(DateTime(2018, 4, 12, 5, 45)));
     expect(prayers.fajr, equals(DateTime(2018, 4, 12, 5, 55)));
@@ -70,7 +70,7 @@ void _testGetPrayerTimesForToday(DateTime date, PrayerCalculationSettings settin
 }
 
 void _testGetCurrentPrayerTime(DateTime date, PrayerCalculationSettings settings, Geocoordinate geo, double timeZone, Clock clock) {
-  test('Test get current (mocked for April 12th, 2018) prayer time at [2, 101, 2] using JAKIM.', () {
+  test('Test get current (mocked for April 12th, 2018 at 8 AM) prayer time at [2, 101, 2] using JAKIM.', () {
     final Prayer prayer = Prayer.now(settings: settings, coordinate: geo, timeZone: timeZone, clock: clock);
     expect(prayer.type, equals(PrayerType.dhuha));
     expect(prayer.time, equals(DateTime(2018, 4, 12, 7, 38)));
@@ -78,7 +78,7 @@ void _testGetCurrentPrayerTime(DateTime date, PrayerCalculationSettings settings
 }
 
 void _testGetNextPrayerTime(DateTime date, PrayerCalculationSettings settings, Geocoordinate geo, double timeZone, Clock clock) {
-  test('Test get next (mocked for April 12th, 2018) prayer time at [2, 101, 2] using JAKIM.', () {
+  test('Test get next (mocked for April 12th, 2018 at 8 AM) prayer time at [2, 101, 2] using JAKIM.', () {
     final Prayer prayer = Prayer.next(settings: settings, coordinate: geo, timeZone: timeZone, clock: clock);
     expect(prayer.type, equals(PrayerType.dhuhr));
     expect(prayer.time, equals(DateTime(2018, 4, 12, 13, 18)));
@@ -86,7 +86,7 @@ void _testGetNextPrayerTime(DateTime date, PrayerCalculationSettings settings, G
 }
 
 void _testGetLaterPrayerTime(DateTime date, PrayerCalculationSettings settings, Geocoordinate geo, double timeZone, Clock clock) {
-  test('Test get later (mocked for April 12th, 2018) prayer time at [2, 101, 2] using JAKIM.', () {
+  test('Test get later (mocked for April 12th, 2018 at 8 AM) prayer time at [2, 101, 2] using JAKIM.', () {
     final Prayer prayer = Prayer.later(settings: settings, coordinate: geo, timeZone: timeZone, clock: clock);
     expect(prayer.type, equals(PrayerType.asr));
     expect(prayer.time, equals(DateTime(2018, 4, 12, 16, 29)));
@@ -94,7 +94,7 @@ void _testGetLaterPrayerTime(DateTime date, PrayerCalculationSettings settings, 
 }
 
 void _testGetAfterLaterPrayerTime(DateTime date, PrayerCalculationSettings settings, Geocoordinate geo, double timeZone, Clock clock) {
-  test('Test get after later (mocked for April 12th, 2018) prayer time at [2, 101, 2] using JAKIM.', () {
+  test('Test get after later (mocked for April 12th, 2018 at 8 AM) prayer time at [2, 101, 2] using JAKIM.', () {
     final Prayer prayer = Prayer.afterLater(settings: settings, coordinate: geo, timeZone: timeZone, clock: clock);
     expect(prayer.type, equals(PrayerType.maghrib));
     expect(prayer.time, equals(DateTime(2018, 4, 12, 19, 23)));
