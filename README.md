@@ -1,7 +1,7 @@
 # Muslim Prayer Times Library for Dart
 
 [![Pub](https://img.shields.io/pub/v/libpray.svg?style=flat-square)](https://pub.dartlang.org/packages/libpray)
-
+[![Build Status](https://img.shields.io/travis/zulfahmi93/dart_libpray.svg?style=flat-square)](https://travis-ci.org/zulfahmi93/dart_libpray)
 
 
 ## Quick Start
