@@ -1,0 +1,9 @@
+language: dart
+dart:
+  - stable
+
+sudo: false
+os:
+  - linux
+
+xvfb: false
