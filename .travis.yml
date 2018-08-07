@@ -10,4 +10,4 @@ xvfb: false
 
 script:
  - pub run build_runner build
- - pub run test
+ - pub run test ./test/libpray_test.dart
