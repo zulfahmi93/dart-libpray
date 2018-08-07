@@ -16,6 +16,3 @@ doc/api/
 
 # Misc
 .DS_Store
-
-# Generated source files
-**/*.g.dart
