@@ -18,3 +18,7 @@
 ## 0.1.0+1
 
 - Added Travis CI.
+
+## 0.1.0+2
+
+- Updated .gitignore to remove the entry which causes the generated source files is not committed.
