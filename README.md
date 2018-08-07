@@ -9,7 +9,7 @@
 1. Open your `pubspec.yaml` file and add this entry:
 
     ```yaml
-    libpray: ^0.1.0
+    libpray: ^0.1.0+1
     ```
 
 2. Then run `pub get`.

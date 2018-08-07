@@ -14,3 +14,7 @@
 
 - __[BREAKING CHANGE]__: Various types have been updated to take advantages of source generation by `built_value` package.
 - Updated dependencies.
+
+## 0.1.0+1
+
+- Added Travis CI.
