@@ -7,3 +7,5 @@ os:
   - linux
 
 xvfb: false
+
+script: pub run build_runner build
