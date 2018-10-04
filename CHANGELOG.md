@@ -22,3 +22,8 @@
 ## 0.1.0+2
 
 - Updated .gitignore to remove the entry which causes the generated source files is not committed.
+
+## 0.2.0
+
+- __[BREAKING CHANGE]__: Updated Dart SDK requirement.
+- __[BREAKING CHANGE]__: Upgraded all dependencies to latest version (as on October 4th, 2018).
