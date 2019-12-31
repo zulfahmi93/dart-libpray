@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 
 void testPrayers() {
   group('prayers tests.', () {
-    // Test data:
+    // Test data 1:
     //   - Date: April 12th, 2018 08:00 at UTC.
     //   - Coordinate: [2, 101, 2].
     //   - Time zone: UTC+08:00.
@@ -19,7 +19,7 @@ void testPrayers() {
     const double timeZone = 8.0;
     PrayerCalculationSettings settings = PrayerCalculationSettings.defaultSettings();
     settings = settings.rebuild((PrayerCalculationSettingsBuilder b) =>
-        b..calculationMethod.replace(CalculationMethod.fromPreset(preset: CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia)));
+        b..calculationMethod.replace(CalculationMethod.fromPreset(preset: CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia, when: date)));
     final Clock clock = _createMockClock();
 
     _testGetPrayerTimesForApril12th2018(date, settings, geo, timeZone);
@@ -28,6 +28,13 @@ void testPrayers() {
     _testGetNextPrayerTime(date, settings, geo, timeZone, clock);
     _testGetLaterPrayerTime(date, settings, geo, timeZone, clock);
     _testGetAfterLaterPrayerTime(date, settings, geo, timeZone, clock);
+
+    // Test data 2:
+    //   - Date: January 1st, 2020 08:00 at UTC.
+    //   - Coordinate: [2, 101, 2].
+    //   - Time zone: UTC+08:00.
+    final DateTime date2 = DateTime.utc(2020, 1, 1, 8, 0);
+    _testGetPrayerTimesForJanuary1st2020(date2, settings, geo, timeZone);
   });
 }
 
@@ -98,6 +105,22 @@ void _testGetAfterLaterPrayerTime(DateTime date, PrayerCalculationSettings setti
     final Prayer prayer = Prayer.afterLater(settings: settings, coordinate: geo, timeZone: timeZone, clock: clock);
     expect(prayer.type, equals(PrayerType.maghrib));
     expect(prayer.time, equals(DateTime(2018, 4, 12, 19, 23)));
+  });
+}
+
+void _testGetPrayerTimesForJanuary1st2020(DateTime date, PrayerCalculationSettings settings, Geocoordinate geo, double timeZone) {
+  test('Test get 1-day prayer times at [2, 101, 2] using JAKIM on January 1st, 2020 at 8 AM.', () {
+    final Prayers prayers = Prayers.on(date: date, settings: settings, coordinate: geo, timeZone: timeZone);
+    expect(prayers.imsak, equals(DateTime(2020, 1, 1, 5, 46)));
+    expect(prayers.fajr, equals(DateTime(2020, 1, 1, 5, 56)));
+    expect(prayers.sunrise, equals(DateTime(2020, 1, 1, 7, 19)));
+    expect(prayers.dhuha, equals(DateTime(2020, 1, 1, 7, 47)));
+    expect(prayers.dhuhr, equals(DateTime(2020, 1, 1, 13, 21)));
+    expect(prayers.asr, equals(DateTime(2020, 1, 1, 16, 44)));
+    expect(prayers.sunset, equals(DateTime(2020, 1, 1, 19, 20)));
+    expect(prayers.maghrib, equals(DateTime(2020, 1, 1, 19, 21)));
+    expect(prayers.isha, equals(DateTime(2020, 1, 1, 20, 35)));
+    expect(prayers.midnight, equals(DateTime(2020, 1, 2, 1, 20)));
   });
 }
 

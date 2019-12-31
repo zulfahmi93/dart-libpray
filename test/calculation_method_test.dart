@@ -15,7 +15,8 @@ void testCalculationMethod() {
     _testSetPresetInstituteOfGeophysicsUniversityOfTehran();
     _testSetPresetUnionDesOrganisationsIslamiquesDeFrance();
     _testSetPresetMajlisUgamaIslamSingapura();
-    _testSetPresetDepartmentOfIslamicAdvancementOfMalaysia();
+    _testSetPresetDepartmentOfIslamicAdvancementOfMalaysiaOnDecember31st2019();
+    _testSetPresetDepartmentOfIslamicAdvancementOfMalaysiaOnJanuary1st2020();
     _testSetPresetUmmAlQuraUniversityDateError();
     _testInvalidPresetError();
     _testSetCustomParameter();
@@ -209,13 +210,29 @@ void _testSetPresetMajlisUgamaIslamSingapura() {
   });
 }
 
-void _testSetPresetDepartmentOfIslamicAdvancementOfMalaysia() {
-  test('Test set CalculationMethod preset to Department of Islamic Advancement, Malaysia..', () {
+void _testSetPresetDepartmentOfIslamicAdvancementOfMalaysiaOnDecember31st2019() {
+  test('Test set CalculationMethod preset to Department of Islamic Advancement, Malaysia for December 31st, 2019.', () {
     final CalculationMethod method =
-        CalculationMethod.fromPreset(preset: CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia, when: DateTime.now().toUtc());
+        CalculationMethod.fromPreset(preset: CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia, when: DateTime.utc(2019, 12, 31));
 
     expect(method.preset, equals(CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia));
     expect(method.fajrParameter.value, equals(20.0));
+    expect(method.fajrParameter.type, equals(PrayerCalculationParameterType.angle));
+    expect(method.maghribParameter.value, equals(0.0));
+    expect(method.maghribParameter.type, equals(PrayerCalculationParameterType.minutesAdjust));
+    expect(method.ishaParameter.value, equals(18.0));
+    expect(method.ishaParameter.type, equals(PrayerCalculationParameterType.angle));
+    expect(method.midnight, equals(Midnight.standard));
+  });
+}
+
+void _testSetPresetDepartmentOfIslamicAdvancementOfMalaysiaOnJanuary1st2020() {
+  test('Test set CalculationMethod preset to Department of Islamic Advancement, Malaysia for January 1st, 2020.', () {
+    final CalculationMethod method =
+        CalculationMethod.fromPreset(preset: CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia, when: DateTime.utc(2020, 1, 1));
+
+    expect(method.preset, equals(CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia));
+    expect(method.fajrParameter.value, equals(18.0));
     expect(method.fajrParameter.type, equals(PrayerCalculationParameterType.angle));
     expect(method.maghribParameter.value, equals(0.0));
     expect(method.maghribParameter.type, equals(PrayerCalculationParameterType.minutesAdjust));

@@ -209,7 +209,7 @@ class CalculationMethodPreset extends EnumClass {
     }
 
     // Check for preset and date.
-    if (this == CalculationMethodPreset.ummAlQuraUniversity) {
+    if (this == CalculationMethodPreset.ummAlQuraUniversity || this == CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia) {
       if (when == null) {
         throw ArgumentError.notNull('when');
       }
@@ -221,19 +221,20 @@ class CalculationMethodPreset extends EnumClass {
 
     // Convert Gregorian date to Hijri.
     final DateTime hijri = this == CalculationMethodPreset.ummAlQuraUniversity ? fromGregorianToIslamic(when.year, when.month, when.day) : null;
+    final DateTime gregorian = this == CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia ? when : null;
 
     return CalculationMethod((CalculationMethodBuilder b) => b
       ..preset = this
-      ..fajrParameter.replace(_getFajrAngleParameter(hijri))
+      ..fajrParameter.replace(_getFajrAngleParameter(hijri, gregorian))
       ..maghribParameter.replace(_getMaghribParameter())
       ..ishaParameter.replace(_getIshaParameter(hijri))
       ..midnight = _getMidnight());
   }
 
   ///
-  /// Gets the fajr angle parameter on given [hijri] date for this preset.
+  /// Gets the fajr angle parameter on given [hijri] and [gregorian] date for this preset.
   ///
-  PrayerCalculationParameter _getFajrAngleParameter(DateTime hijri) {
+  PrayerCalculationParameter _getFajrAngleParameter(DateTime hijri, DateTime gregorian) {
     const PrayerCalculationParameterType type = PrayerCalculationParameterType.angle;
     double value;
 
@@ -268,8 +269,11 @@ class CalculationMethodPreset extends EnumClass {
         break;
 
       case CalculationMethodPreset.majlisUgamaIslamSingapura:
-      case CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia:
         value = 20.0;
+        break;
+
+      case CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia:
+        value = (gregorian.year < 2020) ? 20.0 : 18.0;
         break;
     }
 
