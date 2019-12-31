@@ -27,3 +27,7 @@
 
 - __[BREAKING CHANGE]__: Updated Dart SDK requirement.
 - __[BREAKING CHANGE]__: Upgraded all dependencies to latest version (as on October 4th, 2018).
+
+## 0.2.0+1
+
+- Updated the calculation method to conform with new change announce by Department of Islamic Advancement of Malaysia.
