@@ -15,6 +15,9 @@ part of 'prayers.dart';
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 const PrayerType _$imsak = const PrayerType._('imsak');
 const PrayerType _$fajr = const PrayerType._('fajr');
@@ -268,19 +271,36 @@ class _$Prayers extends Prayers {
       this.isha,
       this.midnight})
       : super._() {
-    if (imsak == null) throw new BuiltValueNullFieldError('Prayers', 'imsak');
-    if (fajr == null) throw new BuiltValueNullFieldError('Prayers', 'fajr');
-    if (sunrise == null)
+    if (imsak == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'imsak');
+    }
+    if (fajr == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'fajr');
+    }
+    if (sunrise == null) {
       throw new BuiltValueNullFieldError('Prayers', 'sunrise');
-    if (dhuha == null) throw new BuiltValueNullFieldError('Prayers', 'dhuha');
-    if (dhuhr == null) throw new BuiltValueNullFieldError('Prayers', 'dhuhr');
-    if (asr == null) throw new BuiltValueNullFieldError('Prayers', 'asr');
-    if (sunset == null) throw new BuiltValueNullFieldError('Prayers', 'sunset');
-    if (maghrib == null)
+    }
+    if (dhuha == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'dhuha');
+    }
+    if (dhuhr == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'dhuhr');
+    }
+    if (asr == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'asr');
+    }
+    if (sunset == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'sunset');
+    }
+    if (maghrib == null) {
       throw new BuiltValueNullFieldError('Prayers', 'maghrib');
-    if (isha == null) throw new BuiltValueNullFieldError('Prayers', 'isha');
-    if (midnight == null)
+    }
+    if (isha == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'isha');
+    }
+    if (midnight == null) {
       throw new BuiltValueNullFieldError('Prayers', 'midnight');
+    }
   }
 
   @override
@@ -291,10 +311,10 @@ class _$Prayers extends Prayers {
   PrayersBuilder toBuilder() => new PrayersBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! Prayers) return false;
-    return imsak == other.imsak &&
+    return other is Prayers &&
+        imsak == other.imsak &&
         fajr == other.fajr &&
         sunrise == other.sunrise &&
         dhuha == other.dhuha &&
@@ -407,7 +427,9 @@ class PrayersBuilder implements Builder<Prayers, PrayersBuilder> {
 
   @override
   void replace(Prayers other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Prayers;
   }
 
@@ -445,8 +467,12 @@ class _$Prayer extends Prayer {
       (new PrayerBuilder()..update(updates)).build();
 
   _$Prayer._({this.type, this.time}) : super._() {
-    if (type == null) throw new BuiltValueNullFieldError('Prayer', 'type');
-    if (time == null) throw new BuiltValueNullFieldError('Prayer', 'time');
+    if (type == null) {
+      throw new BuiltValueNullFieldError('Prayer', 'type');
+    }
+    if (time == null) {
+      throw new BuiltValueNullFieldError('Prayer', 'time');
+    }
   }
 
   @override
@@ -457,10 +483,9 @@ class _$Prayer extends Prayer {
   PrayerBuilder toBuilder() => new PrayerBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! Prayer) return false;
-    return type == other.type && time == other.time;
+    return other is Prayer && type == other.type && time == other.time;
   }
 
   @override
@@ -501,7 +526,9 @@ class PrayerBuilder implements Builder<Prayer, PrayerBuilder> {
 
   @override
   void replace(Prayer other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Prayer;
   }
 
