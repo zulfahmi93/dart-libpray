@@ -35,16 +35,25 @@ abstract class Prayers implements Built<Prayers, PrayersBuilder> {
   /// Create [Prayers].
   ///
   factory Prayers.today(
-      {@required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone, Clock clock = const Clock()}) {
+      {@required PrayerCalculationSettings settings,
+      @required Geocoordinate coordinate,
+      @required double timeZone,
+      Clock clock = const Clock()}) {
     final DateTime now = clock.now();
-    return _PrayerCalculator.getPrayerTimesForOneDay(now, settings, coordinate, timeZone);
+    return _PrayerCalculator.getPrayerTimesForOneDay(
+        now, settings, coordinate, timeZone);
   }
 
   ///
   /// Create [Prayers].
   ///
-  factory Prayers.on({@required DateTime date, @required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone}) {
-    return _PrayerCalculator.getPrayerTimesForOneDay(date, settings, coordinate, timeZone);
+  factory Prayers.on(
+      {@required DateTime date,
+      @required PrayerCalculationSettings settings,
+      @required Geocoordinate coordinate,
+      @required double timeZone}) {
+    return _PrayerCalculator.getPrayerTimesForOneDay(
+        date, settings, coordinate, timeZone);
   }
 
   // ----------------------------- SERIALIZER -----------------------------
@@ -105,32 +114,48 @@ abstract class Prayer implements Built<Prayer, PrayerBuilder> {
   /// Create [Prayer].
   ///
   factory Prayer.now(
-      {@required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone, Clock clock = const Clock()}) {
-    return _PrayerCalculator.getCurrentPrayerTime(clock, settings, coordinate, timeZone);
+      {@required PrayerCalculationSettings settings,
+      @required Geocoordinate coordinate,
+      @required double timeZone,
+      Clock clock = const Clock()}) {
+    return _PrayerCalculator.getCurrentPrayerTime(
+        clock, settings, coordinate, timeZone);
   }
 
   ///
   /// Create [Prayer].
   ///
   factory Prayer.next(
-      {@required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone, Clock clock = const Clock()}) {
-    return _PrayerCalculator.getNextPrayerTime(clock, settings, coordinate, timeZone);
+      {@required PrayerCalculationSettings settings,
+      @required Geocoordinate coordinate,
+      @required double timeZone,
+      Clock clock = const Clock()}) {
+    return _PrayerCalculator.getNextPrayerTime(
+        clock, settings, coordinate, timeZone);
   }
 
   ///
   /// Create [Prayer].
   ///
   factory Prayer.later(
-      {@required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone, Clock clock = const Clock()}) {
-    return _PrayerCalculator.getLaterPrayerTime(clock, settings, coordinate, timeZone);
+      {@required PrayerCalculationSettings settings,
+      @required Geocoordinate coordinate,
+      @required double timeZone,
+      Clock clock = const Clock()}) {
+    return _PrayerCalculator.getLaterPrayerTime(
+        clock, settings, coordinate, timeZone);
   }
 
   ///
   /// Create [Prayer].
   ///
   factory Prayer.afterLater(
-      {@required PrayerCalculationSettings settings, @required Geocoordinate coordinate, @required double timeZone, Clock clock = const Clock()}) {
-    return _PrayerCalculator.getAfterLaterPrayerTime(clock, settings, coordinate, timeZone);
+      {@required PrayerCalculationSettings settings,
+      @required Geocoordinate coordinate,
+      @required double timeZone,
+      Clock clock = const Clock()}) {
+    return _PrayerCalculator.getAfterLaterPrayerTime(
+        clock, settings, coordinate, timeZone);
   }
 
   // ----------------------------- SERIALIZER -----------------------------
@@ -225,7 +250,11 @@ class _PrayerCalculator {
   ///
   /// Generate prayer times for one day at given date.
   ///
-  static Prayers getPrayerTimesForOneDay(DateTime when, PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone) {
+  static Prayers getPrayerTimesForOneDay(
+      DateTime when,
+      PrayerCalculationSettings settings,
+      Geocoordinate coordinate,
+      double timeZone) {
     assert(when != null);
     assert(settings != null);
     assert(coordinate != null);
@@ -247,17 +276,21 @@ class _PrayerCalculator {
     final double newJd = jd - (coordinate.longitude / 360.0);
     _log.fine('Calculated Julian Date for $utc after adjustment is $newJd.');
 
-    final _PrayersInDouble raw = _computeRaw(newJd, settings, coordinate.latitude, coordinate.altitude);
-    final _PrayersInDouble afterAdjustment = _adjustTime(raw, settings, coordinate.longitude, timeZone);
+    final _PrayersInDouble raw =
+        _computeRaw(newJd, settings, coordinate.latitude, coordinate.altitude);
+    final _PrayersInDouble afterAdjustment =
+        _adjustTime(raw, settings, coordinate.longitude, timeZone);
 
     // Calculate midnight.
     final double fajr = afterAdjustment.fajr;
     final double sunrise = afterAdjustment.sunrise;
     final double sunset = afterAdjustment.sunset;
-    afterAdjustment.midnight = _computeMidnightTime(settings.calculationMethod.midnight, fajr, sunrise, sunset);
+    afterAdjustment.midnight = _computeMidnightTime(
+        settings.calculationMethod.midnight, fajr, sunrise, sunset);
 
     // Convert.
-    final Prayers converted = _convertFromFloatingPointFormat(year, month, day, afterAdjustment);
+    final Prayers converted =
+        _convertFromFloatingPointFormat(year, month, day, afterAdjustment);
     final Prayers rounded = Prayers((PrayersBuilder b) => b
       ..imsak = _roundPrayerTime(converted.imsak)
       ..fajr = _roundPrayerTime(converted.fajr)
@@ -276,10 +309,16 @@ class _PrayerCalculator {
   ///
   /// Generate current prayer time.
   ///
-  static Prayer getCurrentPrayerTime(Clock clock, PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone) {
+  static Prayer getCurrentPrayerTime(
+      Clock clock,
+      PrayerCalculationSettings settings,
+      Geocoordinate coordinate,
+      double timeZone) {
     final DateTime now = clock.now();
-    final Prayers today = getPrayerTimesForOneDay(now, settings, coordinate, timeZone);
-    final Prayers yesterday = getPrayerTimesForOneDay(now.add(const Duration(days: -1)), settings, coordinate, timeZone);
+    final Prayers today =
+        getPrayerTimesForOneDay(now, settings, coordinate, timeZone);
+    final Prayers yesterday = getPrayerTimesForOneDay(
+        now.add(const Duration(days: -1)), settings, coordinate, timeZone);
 
     if (now.isBefore(today.imsak)) {
       return Prayer((PrayerBuilder b) => b
@@ -337,10 +376,16 @@ class _PrayerCalculator {
   ///
   /// Generate next prayer time.
   ///
-  static Prayer getNextPrayerTime(Clock clock, PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone) {
+  static Prayer getNextPrayerTime(
+      Clock clock,
+      PrayerCalculationSettings settings,
+      Geocoordinate coordinate,
+      double timeZone) {
     final DateTime now = clock.now();
-    final Prayers today = getPrayerTimesForOneDay(now, settings, coordinate, timeZone);
-    final Prayers tomorrow = getPrayerTimesForOneDay(now.add(const Duration(days: 1)), settings, coordinate, timeZone);
+    final Prayers today =
+        getPrayerTimesForOneDay(now, settings, coordinate, timeZone);
+    final Prayers tomorrow = getPrayerTimesForOneDay(
+        now.add(const Duration(days: 1)), settings, coordinate, timeZone);
 
     if (now.isBefore(today.imsak)) {
       return Prayer((PrayerBuilder b) => b
@@ -398,10 +443,16 @@ class _PrayerCalculator {
   ///
   /// Generate later prayer time.
   ///
-  static Prayer getLaterPrayerTime(Clock clock, PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone) {
+  static Prayer getLaterPrayerTime(
+      Clock clock,
+      PrayerCalculationSettings settings,
+      Geocoordinate coordinate,
+      double timeZone) {
     final DateTime now = clock.now();
-    final Prayers today = getPrayerTimesForOneDay(now, settings, coordinate, timeZone);
-    final Prayers tomorrow = getPrayerTimesForOneDay(now.add(const Duration(days: 1)), settings, coordinate, timeZone);
+    final Prayers today =
+        getPrayerTimesForOneDay(now, settings, coordinate, timeZone);
+    final Prayers tomorrow = getPrayerTimesForOneDay(
+        now.add(const Duration(days: 1)), settings, coordinate, timeZone);
 
     if (now.isBefore(today.imsak)) {
       return Prayer((PrayerBuilder b) => b
@@ -459,10 +510,16 @@ class _PrayerCalculator {
   ///
   /// Generate after later prayer time.
   ///
-  static Prayer getAfterLaterPrayerTime(Clock clock, PrayerCalculationSettings settings, Geocoordinate coordinate, double timeZone) {
+  static Prayer getAfterLaterPrayerTime(
+      Clock clock,
+      PrayerCalculationSettings settings,
+      Geocoordinate coordinate,
+      double timeZone) {
     final DateTime now = clock.now();
-    final Prayers today = getPrayerTimesForOneDay(now, settings, coordinate, timeZone);
-    final Prayers tomorrow = getPrayerTimesForOneDay(now.add(const Duration(days: 1)), settings, coordinate, timeZone);
+    final Prayers today =
+        getPrayerTimesForOneDay(now, settings, coordinate, timeZone);
+    final Prayers tomorrow = getPrayerTimesForOneDay(
+        now.add(const Duration(days: 1)), settings, coordinate, timeZone);
 
     if (now.isBefore(today.imsak)) {
       return Prayer((PrayerBuilder b) => b
@@ -520,38 +577,53 @@ class _PrayerCalculator {
   ///
   /// Compute all prayer times at given Julian Date and return the raw results.
   ///
-  static _PrayersInDouble _computeRaw(double jd, PrayerCalculationSettings settings, double latitude, double altitude) {
+  static _PrayersInDouble _computeRaw(double jd,
+      PrayerCalculationSettings settings, double latitude, double altitude) {
     final _PrayersInDouble raw = _PrayersInDouble();
 
-    // Compute imsak.
-    if (settings.imsakParameter.type == PrayerCalculationParameterType.angle) {
-      // raw.imsak = _computeImsakTime(jd, settings.imsakParameter.value, latitude);
-      // NOTE: Do imsak time can be calculated using angle parameter?
-      throw _PrayerCalculatorError('Imsak calculation parameter type must be the type of minute adjust.');
-    }
+    try {
+      // Compute imsak.
+      if (settings.imsakParameter.type ==
+          PrayerCalculationParameterType.angle) {
+        // raw.imsak = _computeImsakTime(jd, settings.imsakParameter.value, latitude);
+        // NOTE: Do imsak time can be calculated using angle parameter?
+        throw _PrayerCalculatorError(
+            'Imsak calculation parameter type must be the type of minute adjust.');
+      }
 
-    // Check fajr parameter type.
-    if (settings.calculationMethod.fajrParameter.type == PrayerCalculationParameterType.minutesAdjust) {
-      throw _PrayerCalculatorError('Fajr calculation parameter type must be the type of angle.');
+      // Check fajr parameter type.
+      if (settings.calculationMethod.fajrParameter.type ==
+          PrayerCalculationParameterType.minutesAdjust) {
+        throw _PrayerCalculatorError(
+            'Fajr calculation parameter type must be the type of angle.');
+      }
+    } catch (e) {
+      _log.warning(e.toString());
     }
 
     // Compute fajr, sunrise, dhuha, dhuhr, asr and sunset.
     raw
-      ..fajr = _computeFajrTime(jd, settings.calculationMethod.fajrParameter.value, latitude)
+      ..fajr = _computeFajrTime(
+          jd, settings.calculationMethod.fajrParameter.value, latitude)
       ..sunrise = _computeSunriseTime(jd, latitude, altitude)
       ..dhuha = _computeDhuhaTime(raw.fajr, raw.sunrise)
       ..dhuhr = _computeDhuhrTime(jd)
-      ..asr = _computeAsrTime(jd, settings.juristicMethod.timeOfShadow, latitude)
+      ..asr =
+          _computeAsrTime(jd, settings.juristicMethod.timeOfShadow, latitude)
       ..sunset = _computeSunsetTime(jd, latitude, altitude);
 
     // Compute maghrib.
-    if (settings.calculationMethod.maghribParameter.type == PrayerCalculationParameterType.angle) {
-      raw.maghrib = _computeMaghribTime(jd, settings.calculationMethod.maghribParameter.value, latitude);
+    if (settings.calculationMethod.maghribParameter.type ==
+        PrayerCalculationParameterType.angle) {
+      raw.maghrib = _computeMaghribTime(
+          jd, settings.calculationMethod.maghribParameter.value, latitude);
     }
 
     // Compute isha.
-    if (settings.calculationMethod.ishaParameter.type == PrayerCalculationParameterType.angle) {
-      raw.isha = _computeIshaTime(jd, settings.calculationMethod.ishaParameter.value, latitude);
+    if (settings.calculationMethod.ishaParameter.type ==
+        PrayerCalculationParameterType.angle) {
+      raw.isha = _computeIshaTime(
+          jd, settings.calculationMethod.ishaParameter.value, latitude);
     }
 
     return raw;
@@ -574,11 +646,13 @@ class _PrayerCalculator {
   ///
   /// Calculate prayer time for fajr.
   ///
-  static double _computeFajrTime(double jd, double fajrParameterValue, double latitude) {
+  static double _computeFajrTime(
+      double jd, double fajrParameterValue, double latitude) {
     _log.fine('Computing fajr prayer time.');
 
     final double dayFraction = getDayFraction(_kFajrDefaultTime);
-    final double fajrTime = computeSolarTime(jd, dayFraction, fajrParameterValue, latitude, Direction.counterClockwise);
+    final double fajrTime = computeSolarTime(jd, dayFraction,
+        fajrParameterValue, latitude, Direction.counterClockwise);
     _log.info('Calculated fajr: $fajrTime.');
 
     return fajrTime;
@@ -587,12 +661,14 @@ class _PrayerCalculator {
   ///
   /// Calculate prayer time for sunrise.
   ///
-  static double _computeSunriseTime(double jd, double latitude, double altitude) {
+  static double _computeSunriseTime(
+      double jd, double latitude, double altitude) {
     _log.fine('Computing sunrise prayer time.');
 
     final double dayFraction = getDayFraction(_kSunriseDefaultTime);
     final double sunriseAngle = computeSunriseAngle(altitude);
-    final double sunriseTime = computeSolarTime(jd, dayFraction, sunriseAngle, latitude, Direction.counterClockwise);
+    final double sunriseTime = computeSolarTime(
+        jd, dayFraction, sunriseAngle, latitude, Direction.counterClockwise);
     _log.info('Calculated sunrise: $sunriseTime.');
 
     return sunriseTime;
@@ -638,13 +714,16 @@ class _PrayerCalculator {
   ///
   /// Calculate prayer time for asr.
   ///
-  static double _computeAsrTime(double jd, int juristicTimeOfShadow, double latitude) {
+  static double _computeAsrTime(
+      double jd, int juristicTimeOfShadow, double latitude) {
     _log.fine('Computing asr prayer time.');
 
     final double dayFraction = getDayFraction(_kAsrDefaultTime);
     final double sunDeclination = computeSunDeclination(jd + dayFraction);
-    final double angle = -inverseCotangentInDegree(juristicTimeOfShadow + tangentOfDegree((latitude - sunDeclination).abs()));
-    final double asrTime = computeSolarTime(jd, dayFraction, angle, latitude, Direction.clockwise);
+    final double angle = -inverseCotangentInDegree(juristicTimeOfShadow +
+        tangentOfDegree((latitude - sunDeclination).abs()));
+    final double asrTime =
+        computeSolarTime(jd, dayFraction, angle, latitude, Direction.clockwise);
     _log.info('Calculated asr: $asrTime.');
 
     return asrTime;
@@ -653,12 +732,14 @@ class _PrayerCalculator {
   ///
   /// Calculate prayer time for sunset.
   ///
-  static double _computeSunsetTime(double jd, double latitude, double altitude) {
+  static double _computeSunsetTime(
+      double jd, double latitude, double altitude) {
     _log.fine('Computing sunset prayer time.');
 
     final double dayFraction = getDayFraction(_kSunsetDefaultTime);
     final double sunriseAngle = computeSunriseAngle(altitude);
-    final double sunsetTime = computeSolarTime(jd, dayFraction, sunriseAngle, latitude, Direction.clockwise);
+    final double sunsetTime = computeSolarTime(
+        jd, dayFraction, sunriseAngle, latitude, Direction.clockwise);
     _log.info('Calculated sunset: $sunsetTime.');
 
     return sunsetTime;
@@ -667,11 +748,13 @@ class _PrayerCalculator {
   ///
   /// Calculate prayer time for maghrib.
   ///
-  static double _computeMaghribTime(double jd, double maghribParameterValue, double latitude) {
+  static double _computeMaghribTime(
+      double jd, double maghribParameterValue, double latitude) {
     _log.fine('Computing maghrib prayer time.');
 
     final double dayFraction = getDayFraction(_kMaghribDefaultTime);
-    final double maghribTime = computeSolarTime(jd, dayFraction, maghribParameterValue, latitude, Direction.clockwise);
+    final double maghribTime = computeSolarTime(
+        jd, dayFraction, maghribParameterValue, latitude, Direction.clockwise);
     _log.info('Calculated maghrib: $maghribTime.');
 
     return maghribTime;
@@ -680,11 +763,13 @@ class _PrayerCalculator {
   ///
   /// Calculate prayer time for isha.
   ///
-  static double _computeIshaTime(double jd, double ishaParameterValue, double latitude) {
+  static double _computeIshaTime(
+      double jd, double ishaParameterValue, double latitude) {
     _log.fine('Computing isyak prayer time.');
 
     final double dayFraction = getDayFraction(_kIshaDefaultTime);
-    final double ishaTime = computeSolarTime(jd, dayFraction, ishaParameterValue, latitude, Direction.clockwise);
+    final double ishaTime = computeSolarTime(
+        jd, dayFraction, ishaParameterValue, latitude, Direction.clockwise);
     _log.info('Calculated isha: $ishaTime.');
 
     return ishaTime;
@@ -693,10 +778,13 @@ class _PrayerCalculator {
   ///
   /// Calculate time for midnight.
   ///
-  static double _computeMidnightTime(Midnight method, double fajr, double sunrise, double sunset) {
+  static double _computeMidnightTime(
+      Midnight method, double fajr, double sunrise, double sunset) {
     _log.fine('Computing midnight time.');
 
-    final double duration = method == Midnight.jafari ? computeDuration(fajr, sunset) : computeDuration(sunrise, sunset);
+    final double duration = method == Midnight.jafari
+        ? computeDuration(fajr, sunset)
+        : computeDuration(sunrise, sunset);
     final double midnightTime = sunset + (duration / 2.0);
     _log.info('Calculated midnight: $midnightTime.');
 
@@ -706,25 +794,32 @@ class _PrayerCalculator {
   ///
   /// Apply adjustments to given calculated prayer time.
   ///
-  static _PrayersInDouble _adjustTime(_PrayersInDouble raw, PrayerCalculationSettings settings, double longitude, double timeZone) {
+  static _PrayersInDouble _adjustTime(_PrayersInDouble raw,
+      PrayerCalculationSettings settings, double longitude, double timeZone) {
     // Copy reference.
     _PrayersInDouble newRaw = raw;
 
     // Adjust imsak if minute adjustment parameter is used.
-    if (settings.imsakParameter.type == PrayerCalculationParameterType.minutesAdjust) {
+    if (settings.imsakParameter.type ==
+        PrayerCalculationParameterType.minutesAdjust) {
       newRaw.imsak = newRaw.fajr + (settings.imsakParameter.value / 60.0);
     }
 
     // Adjust maghrib if minute adjustment parameter is used.
     // This is Sunni method which maghrib equals to sunset. As precaution, this
     // library add 1 minute to the sunset time.
-    if (settings.calculationMethod.maghribParameter.type == PrayerCalculationParameterType.minutesAdjust) {
-      newRaw.maghrib = newRaw.sunset + 0.016666666666666667 + (settings.calculationMethod.maghribParameter.value / 60.0);
+    if (settings.calculationMethod.maghribParameter.type ==
+        PrayerCalculationParameterType.minutesAdjust) {
+      newRaw.maghrib = newRaw.sunset +
+          0.016666666666666667 +
+          (settings.calculationMethod.maghribParameter.value / 60.0);
     }
 
     // Adjust isha if minute adjustment parameter is used.
-    if (settings.calculationMethod.ishaParameter.type == PrayerCalculationParameterType.minutesAdjust) {
-      newRaw.isha = newRaw.maghrib + (settings.calculationMethod.ishaParameter.value / 60.0);
+    if (settings.calculationMethod.ishaParameter.type ==
+        PrayerCalculationParameterType.minutesAdjust) {
+      newRaw.isha = newRaw.maghrib +
+          (settings.calculationMethod.ishaParameter.value / 60.0);
     }
 
     // Adjust to time zone.
@@ -737,7 +832,8 @@ class _PrayerCalculator {
   ///
   /// Apply time zone adjustment to given calculated prayer time.
   ///
-  static _PrayersInDouble _adjustAllToTimeZone(_PrayersInDouble raw, double longitude, double timeZone) {
+  static _PrayersInDouble _adjustAllToTimeZone(
+      _PrayersInDouble raw, double longitude, double timeZone) {
     final double adjustment = timeZone - (longitude / 15.0);
     raw
       ..imsak = raw.imsak + adjustment
@@ -757,7 +853,8 @@ class _PrayerCalculator {
   /// Adjust calculated imsak, fajr, maghrib and isha prayer times to high
   /// latitude adjustment.
   ///
-  static _PrayersInDouble _adjustAllForHighLatitude(_PrayersInDouble raw, PrayerCalculationSettings settings) {
+  static _PrayersInDouble _adjustAllForHighLatitude(
+      _PrayersInDouble raw, PrayerCalculationSettings settings) {
     //
     // Do not apply adjustment if none option is specified.
     if (settings.highLatitudeAdjustment == HighLatitudeAdjustment.none) {
@@ -773,19 +870,26 @@ class _PrayerCalculator {
     final double maghrib = raw.maghrib;
     final double isha = raw.isha;
     final double imsakParameterValue = settings.imsakParameter.value;
-    final double fajrParameterValue = settings.calculationMethod.fajrParameter.value;
-    final double maghribParameterValue = settings.calculationMethod.maghribParameter.value;
-    final double ishaParameterValue = settings.calculationMethod.ishaParameter.value;
+    final double fajrParameterValue =
+        settings.calculationMethod.fajrParameter.value;
+    final double maghribParameterValue =
+        settings.calculationMethod.maghribParameter.value;
+    final double ishaParameterValue =
+        settings.calculationMethod.ishaParameter.value;
 
     // Compute sunrise to sunset difference.
     final double diff = computeDuration(raw.sunrise, raw.sunset);
 
     // Adjust.
     raw
-      ..imsak = _adjustForHighLatitude(method, imsak, sunrise, imsakParameterValue, diff, Direction.counterClockwise)
-      ..fajr = _adjustForHighLatitude(method, fajr, sunrise, fajrParameterValue, diff, Direction.counterClockwise)
-      ..maghrib = _adjustForHighLatitude(method, maghrib, sunset, maghribParameterValue, diff, Direction.clockwise)
-      ..isha = _adjustForHighLatitude(method, isha, sunset, ishaParameterValue, diff, Direction.clockwise);
+      ..imsak = _adjustForHighLatitude(method, imsak, sunrise,
+          imsakParameterValue, diff, Direction.counterClockwise)
+      ..fajr = _adjustForHighLatitude(method, fajr, sunrise, fajrParameterValue,
+          diff, Direction.counterClockwise)
+      ..maghrib = _adjustForHighLatitude(method, maghrib, sunset,
+          maghribParameterValue, diff, Direction.clockwise)
+      ..isha = _adjustForHighLatitude(
+          method, isha, sunset, ishaParameterValue, diff, Direction.clockwise);
 
     return raw;
   }
@@ -793,15 +897,24 @@ class _PrayerCalculator {
   ///
   /// Adjust calculated prayer time to high latitude adjustment.
   ///
-  static double _adjustForHighLatitude(HighLatitudeAdjustment method, double time, double baseTime, double angle, double diff, Direction direction) {
+  static double _adjustForHighLatitude(
+      HighLatitudeAdjustment method,
+      double time,
+      double baseTime,
+      double angle,
+      double diff,
+      Direction direction) {
     // Compute night fraction and duration.
     final double nightFraction = getNightFraction(method, angle, diff);
-    final double duration = direction == Direction.clockwise ? computeDuration(time, baseTime) : computeDuration(baseTime, time);
+    final double duration = direction == Direction.clockwise
+        ? computeDuration(time, baseTime)
+        : computeDuration(baseTime, time);
 
     // Copy reference;
     double newTime = time;
     if (duration > nightFraction) {
-      final double adjustment = direction == Direction.clockwise ? nightFraction : -nightFraction;
+      final double adjustment =
+          direction == Direction.clockwise ? nightFraction : -nightFraction;
       newTime = baseTime + adjustment;
     }
 
@@ -811,7 +924,8 @@ class _PrayerCalculator {
   ///
   /// Apply time zone adjustment to given calculated prayer time.
   ///
-  static _PrayersInDouble _minuteAdjustAll(_PrayersInDouble raw, PrayerCalculationSettings settings) {
+  static _PrayersInDouble _minuteAdjustAll(
+      _PrayersInDouble raw, PrayerCalculationSettings settings) {
     raw
       ..imsak = raw.imsak + (settings.imsakMinutesAdjustment / 60.0)
       ..fajr = raw.fajr + (settings.fajrMinutesAdjustment / 60.0)
@@ -828,19 +942,30 @@ class _PrayerCalculator {
   ///
   /// Convert [_PrayersInDouble] to [Prayers].
   ///
-  static Prayers _convertFromFloatingPointFormat(int year, int month, int day, _PrayersInDouble prayers) {
+  static Prayers _convertFromFloatingPointFormat(
+      int year, int month, int day, _PrayersInDouble prayers) {
     final DateTime date = DateTime(year, month, day);
     return Prayers((PrayersBuilder b) => b
-      ..imsak = date.add(Duration(microseconds: (prayers.imsak * _kMicrosecondsInAnHour).round()))
-      ..fajr = date.add(Duration(microseconds: (prayers.fajr * _kMicrosecondsInAnHour).round()))
-      ..sunrise = date.add(Duration(microseconds: (prayers.sunrise * _kMicrosecondsInAnHour).round()))
-      ..dhuha = date.add(Duration(microseconds: (prayers.dhuha * _kMicrosecondsInAnHour).round()))
-      ..dhuhr = date.add(Duration(microseconds: (prayers.dhuhr * _kMicrosecondsInAnHour).round()))
-      ..asr = date.add(Duration(microseconds: (prayers.asr * _kMicrosecondsInAnHour).round()))
-      ..sunset = date.add(Duration(microseconds: (prayers.sunset * _kMicrosecondsInAnHour).round()))
-      ..maghrib = date.add(Duration(microseconds: (prayers.maghrib * _kMicrosecondsInAnHour).round()))
-      ..isha = date.add(Duration(microseconds: (prayers.isha * _kMicrosecondsInAnHour).round()))
-      ..midnight = date.add(Duration(microseconds: (prayers.midnight * _kMicrosecondsInAnHour).round())));
+      ..imsak = date.add(Duration(
+          microseconds: (prayers.imsak * _kMicrosecondsInAnHour).round()))
+      ..fajr = date.add(Duration(
+          microseconds: (prayers.fajr * _kMicrosecondsInAnHour).round()))
+      ..sunrise = date.add(Duration(
+          microseconds: (prayers.sunrise * _kMicrosecondsInAnHour).round()))
+      ..dhuha = date.add(Duration(
+          microseconds: (prayers.dhuha * _kMicrosecondsInAnHour).round()))
+      ..dhuhr = date.add(Duration(
+          microseconds: (prayers.dhuhr * _kMicrosecondsInAnHour).round()))
+      ..asr = date.add(Duration(
+          microseconds: (prayers.asr * _kMicrosecondsInAnHour).round()))
+      ..sunset = date.add(Duration(
+          microseconds: (prayers.sunset * _kMicrosecondsInAnHour).round()))
+      ..maghrib = date.add(Duration(
+          microseconds: (prayers.maghrib * _kMicrosecondsInAnHour).round()))
+      ..isha = date.add(Duration(
+          microseconds: (prayers.isha * _kMicrosecondsInAnHour).round()))
+      ..midnight = date.add(Duration(
+          microseconds: (prayers.midnight * _kMicrosecondsInAnHour).round())));
   }
 
   ///
@@ -849,7 +974,8 @@ class _PrayerCalculator {
   /// minute component is added with one.
   ///
   static DateTime _roundPrayerTime(DateTime time) {
-    final DateTime withoutSecond = DateTime(time.year, time.month, time.day, time.hour, time.minute);
+    final DateTime withoutSecond =
+        DateTime(time.year, time.month, time.day, time.hour, time.minute);
     if (time.second == 0) {
       return withoutSecond;
     }
@@ -858,7 +984,8 @@ class _PrayerCalculator {
     final Duration toAdd = Duration(seconds: 60 - diff);
 
     final DateTime newTime = time.add(toAdd);
-    return DateTime(newTime.year, newTime.month, newTime.day, newTime.hour, newTime.minute);
+    return DateTime(
+        newTime.year, newTime.month, newTime.day, newTime.hour, newTime.minute);
   }
 }
 

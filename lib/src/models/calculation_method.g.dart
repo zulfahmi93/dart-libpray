@@ -6,16 +6,6 @@ part of 'calculation_method.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line
-// ignore_for_file: annotate_overrides
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_catches_without_on_clauses
-// ignore_for_file: avoid_returning_this
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: prefer_expression_function_bodies
-// ignore_for_file: sort_constructors_first
-
 const PrayerCalculationParameterType _$minutesAdjust =
     const PrayerCalculationParameterType._('minutesAdjust');
 const PrayerCalculationParameterType _$angle =
@@ -143,7 +133,7 @@ class _$CalculationMethodSerializer
   final String wireName = 'CalculationMethod';
 
   @override
-  Iterable serialize(Serializers serializers, CalculationMethod object,
+  Iterable<Object> serialize(Serializers serializers, CalculationMethod object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'preset',
@@ -167,7 +157,8 @@ class _$CalculationMethodSerializer
   }
 
   @override
-  CalculationMethod deserialize(Serializers serializers, Iterable serialized,
+  CalculationMethod deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new CalculationMethodBuilder();
 
@@ -239,23 +230,28 @@ class _$PrayerCalculationParameterSerializer
   final String wireName = 'PrayerCalculationParameter';
 
   @override
-  Iterable serialize(Serializers serializers, PrayerCalculationParameter object,
+  Iterable<Object> serialize(
+      Serializers serializers, PrayerCalculationParameter object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'type',
-      serializers.serialize(object.type,
-          specifiedType: const FullType(PrayerCalculationParameterType)),
-      'value',
-      serializers.serialize(object.value,
-          specifiedType: const FullType(double)),
-    ];
-
+    final result = <Object>[];
+    if (object.type != null) {
+      result
+        ..add('type')
+        ..add(serializers.serialize(object.type,
+            specifiedType: const FullType(PrayerCalculationParameterType)));
+    }
+    if (object.value != null) {
+      result
+        ..add('value')
+        ..add(serializers.serialize(object.value,
+            specifiedType: const FullType(double)));
+    }
     return result;
   }
 
   @override
   PrayerCalculationParameter deserialize(
-      Serializers serializers, Iterable serialized,
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new PrayerCalculationParameterBuilder();
 
@@ -329,7 +325,8 @@ class _$CalculationMethod extends CalculationMethod {
   @override
   final Midnight midnight;
 
-  factory _$CalculationMethod([void updates(CalculationMethodBuilder b)]) =>
+  factory _$CalculationMethod(
+          [void Function(CalculationMethodBuilder) updates]) =>
       (new CalculationMethodBuilder()..update(updates)).build();
 
   _$CalculationMethod._(
@@ -339,21 +336,26 @@ class _$CalculationMethod extends CalculationMethod {
       this.ishaParameter,
       this.midnight})
       : super._() {
-    if (preset == null)
+    if (preset == null) {
       throw new BuiltValueNullFieldError('CalculationMethod', 'preset');
-    if (fajrParameter == null)
+    }
+    if (fajrParameter == null) {
       throw new BuiltValueNullFieldError('CalculationMethod', 'fajrParameter');
-    if (maghribParameter == null)
+    }
+    if (maghribParameter == null) {
       throw new BuiltValueNullFieldError(
           'CalculationMethod', 'maghribParameter');
-    if (ishaParameter == null)
+    }
+    if (ishaParameter == null) {
       throw new BuiltValueNullFieldError('CalculationMethod', 'ishaParameter');
-    if (midnight == null)
+    }
+    if (midnight == null) {
       throw new BuiltValueNullFieldError('CalculationMethod', 'midnight');
+    }
   }
 
   @override
-  CalculationMethod rebuild(void updates(CalculationMethodBuilder b)) =>
+  CalculationMethod rebuild(void Function(CalculationMethodBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -361,10 +363,10 @@ class _$CalculationMethod extends CalculationMethod {
       new CalculationMethodBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! CalculationMethod) return false;
-    return preset == other.preset &&
+    return other is CalculationMethod &&
+        preset == other.preset &&
         fajrParameter == other.fajrParameter &&
         maghribParameter == other.maghribParameter &&
         ishaParameter == other.ishaParameter &&
@@ -439,12 +441,14 @@ class CalculationMethodBuilder
 
   @override
   void replace(CalculationMethod other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$CalculationMethod;
   }
 
   @override
-  void update(void updates(CalculationMethodBuilder b)) {
+  void update(void Function(CalculationMethodBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -486,19 +490,14 @@ class _$PrayerCalculationParameter extends PrayerCalculationParameter {
   final double value;
 
   factory _$PrayerCalculationParameter(
-          [void updates(PrayerCalculationParameterBuilder b)]) =>
+          [void Function(PrayerCalculationParameterBuilder) updates]) =>
       (new PrayerCalculationParameterBuilder()..update(updates)).build();
 
-  _$PrayerCalculationParameter._({this.type, this.value}) : super._() {
-    if (type == null)
-      throw new BuiltValueNullFieldError('PrayerCalculationParameter', 'type');
-    if (value == null)
-      throw new BuiltValueNullFieldError('PrayerCalculationParameter', 'value');
-  }
+  _$PrayerCalculationParameter._({this.type, this.value}) : super._();
 
   @override
   PrayerCalculationParameter rebuild(
-          void updates(PrayerCalculationParameterBuilder b)) =>
+          void Function(PrayerCalculationParameterBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -506,10 +505,11 @@ class _$PrayerCalculationParameter extends PrayerCalculationParameter {
       new PrayerCalculationParameterBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! PrayerCalculationParameter) return false;
-    return type == other.type && value == other.value;
+    return other is PrayerCalculationParameter &&
+        type == other.type &&
+        value == other.value;
   }
 
   @override
@@ -552,12 +552,14 @@ class PrayerCalculationParameterBuilder
 
   @override
   void replace(PrayerCalculationParameter other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$PrayerCalculationParameter;
   }
 
   @override
-  void update(void updates(PrayerCalculationParameterBuilder b)) {
+  void update(void Function(PrayerCalculationParameterBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -569,3 +571,5 @@ class PrayerCalculationParameterBuilder
     return _$result;
   }
 }
+
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

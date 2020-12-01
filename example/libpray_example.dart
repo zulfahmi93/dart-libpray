@@ -9,8 +9,25 @@ void main() {
 
   // Init settings.
   // Set calculation method to JAKIM (Fajr: 18.0 and Isha: 20.0).
-  final PrayerCalculationSettings settings = PrayerCalculationSettings((PrayerCalculationSettingsBuilder b) =>
-      b..calculationMethod.replace(CalculationMethod.fromPreset(preset: CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia)));
+  final PrayerCalculationSettings settings = PrayerCalculationSettings(
+    (PrayerCalculationSettingsBuilder b) => b
+      ..imsakParameter.type = PrayerCalculationParameterType.minutesAdjust
+      ..imsakParameter.value = -10.0
+      ..imsakMinutesAdjustment = 0
+      ..fajrMinutesAdjustment = 0
+      ..sunriseMinutesAdjustment = 0
+      ..dhuhaMinutesAdjustment = 0
+      ..dhuhrMinutesAdjustment = 0
+      ..asrMinutesAdjustment = 0
+      ..maghribMinutesAdjustment = 0
+      ..ishaMinutesAdjustment = 0
+      ..highLatitudeAdjustment = HighLatitudeAdjustment.none
+      ..calculationMethod.replace(CalculationMethod.fromPreset(
+        preset: CalculationMethodPreset.departmentOfIslamicAdvancementOfMalaysia, 
+        when: when))
+        ..juristicMethod.replace(
+          JuristicMethod.fromPreset(preset: JuristicMethodPreset.standard))
+      );
 
   // Init location info.
   final Geocoordinate geo = Geocoordinate((GeocoordinateBuilder b) => b

@@ -6,16 +6,6 @@ part of 'prayers.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line
-// ignore_for_file: annotate_overrides
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_catches_without_on_clauses
-// ignore_for_file: avoid_returning_this
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: prefer_expression_function_bodies
-// ignore_for_file: sort_constructors_first
-
 const PrayerType _$imsak = const PrayerType._('imsak');
 const PrayerType _$fajr = const PrayerType._('fajr');
 const PrayerType _$sunrise = const PrayerType._('sunrise');
@@ -71,7 +61,7 @@ class _$PrayersSerializer implements StructuredSerializer<Prayers> {
   final String wireName = 'Prayers';
 
   @override
-  Iterable serialize(Serializers serializers, Prayers object,
+  Iterable<Object> serialize(Serializers serializers, Prayers object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'imsak',
@@ -110,7 +100,7 @@ class _$PrayersSerializer implements StructuredSerializer<Prayers> {
   }
 
   @override
-  Prayers deserialize(Serializers serializers, Iterable serialized,
+  Prayers deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new PrayersBuilder();
 
@@ -174,7 +164,7 @@ class _$PrayerSerializer implements StructuredSerializer<Prayer> {
   final String wireName = 'Prayer';
 
   @override
-  Iterable serialize(Serializers serializers, Prayer object,
+  Iterable<Object> serialize(Serializers serializers, Prayer object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'type',
@@ -189,7 +179,7 @@ class _$PrayerSerializer implements StructuredSerializer<Prayer> {
   }
 
   @override
-  Prayer deserialize(Serializers serializers, Iterable serialized,
+  Prayer deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new PrayerBuilder();
 
@@ -253,7 +243,7 @@ class _$Prayers extends Prayers {
   @override
   final DateTime midnight;
 
-  factory _$Prayers([void updates(PrayersBuilder b)]) =>
+  factory _$Prayers([void Function(PrayersBuilder) updates]) =>
       (new PrayersBuilder()..update(updates)).build();
 
   _$Prayers._(
@@ -268,33 +258,50 @@ class _$Prayers extends Prayers {
       this.isha,
       this.midnight})
       : super._() {
-    if (imsak == null) throw new BuiltValueNullFieldError('Prayers', 'imsak');
-    if (fajr == null) throw new BuiltValueNullFieldError('Prayers', 'fajr');
-    if (sunrise == null)
+    if (imsak == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'imsak');
+    }
+    if (fajr == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'fajr');
+    }
+    if (sunrise == null) {
       throw new BuiltValueNullFieldError('Prayers', 'sunrise');
-    if (dhuha == null) throw new BuiltValueNullFieldError('Prayers', 'dhuha');
-    if (dhuhr == null) throw new BuiltValueNullFieldError('Prayers', 'dhuhr');
-    if (asr == null) throw new BuiltValueNullFieldError('Prayers', 'asr');
-    if (sunset == null) throw new BuiltValueNullFieldError('Prayers', 'sunset');
-    if (maghrib == null)
+    }
+    if (dhuha == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'dhuha');
+    }
+    if (dhuhr == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'dhuhr');
+    }
+    if (asr == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'asr');
+    }
+    if (sunset == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'sunset');
+    }
+    if (maghrib == null) {
       throw new BuiltValueNullFieldError('Prayers', 'maghrib');
-    if (isha == null) throw new BuiltValueNullFieldError('Prayers', 'isha');
-    if (midnight == null)
+    }
+    if (isha == null) {
+      throw new BuiltValueNullFieldError('Prayers', 'isha');
+    }
+    if (midnight == null) {
       throw new BuiltValueNullFieldError('Prayers', 'midnight');
+    }
   }
 
   @override
-  Prayers rebuild(void updates(PrayersBuilder b)) =>
+  Prayers rebuild(void Function(PrayersBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
   PrayersBuilder toBuilder() => new PrayersBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! Prayers) return false;
-    return imsak == other.imsak &&
+    return other is Prayers &&
+        imsak == other.imsak &&
         fajr == other.fajr &&
         sunrise == other.sunrise &&
         dhuha == other.dhuha &&
@@ -407,12 +414,14 @@ class PrayersBuilder implements Builder<Prayers, PrayersBuilder> {
 
   @override
   void replace(Prayers other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Prayers;
   }
 
   @override
-  void update(void updates(PrayersBuilder b)) {
+  void update(void Function(PrayersBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -441,26 +450,29 @@ class _$Prayer extends Prayer {
   @override
   final DateTime time;
 
-  factory _$Prayer([void updates(PrayerBuilder b)]) =>
+  factory _$Prayer([void Function(PrayerBuilder) updates]) =>
       (new PrayerBuilder()..update(updates)).build();
 
   _$Prayer._({this.type, this.time}) : super._() {
-    if (type == null) throw new BuiltValueNullFieldError('Prayer', 'type');
-    if (time == null) throw new BuiltValueNullFieldError('Prayer', 'time');
+    if (type == null) {
+      throw new BuiltValueNullFieldError('Prayer', 'type');
+    }
+    if (time == null) {
+      throw new BuiltValueNullFieldError('Prayer', 'time');
+    }
   }
 
   @override
-  Prayer rebuild(void updates(PrayerBuilder b)) =>
+  Prayer rebuild(void Function(PrayerBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
   PrayerBuilder toBuilder() => new PrayerBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! Prayer) return false;
-    return type == other.type && time == other.time;
+    return other is Prayer && type == other.type && time == other.time;
   }
 
   @override
@@ -501,12 +513,14 @@ class PrayerBuilder implements Builder<Prayer, PrayerBuilder> {
 
   @override
   void replace(Prayer other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Prayer;
   }
 
   @override
-  void update(void updates(PrayerBuilder b)) {
+  void update(void Function(PrayerBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -517,3 +531,5 @@ class PrayerBuilder implements Builder<Prayer, PrayerBuilder> {
     return _$result;
   }
 }
+
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

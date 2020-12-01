@@ -53,39 +53,51 @@ abstract class PrayerCalculationSettings implements Built<PrayerCalculationSetti
   // ----------------------------- PROPERTIES -----------------------------
 
   /// Calculation parameter for imsak prayer.
+  @nullable
   PrayerCalculationParameter get imsakParameter;
 
   /// Calculation method for calculating fajr, maghrib and isha prayer.
+  @nullable
   CalculationMethod get calculationMethod;
 
   /// Juristic method for calculating asr prayer.
+  @nullable
   JuristicMethod get juristicMethod;
 
   /// High latitude adjustment method for adjusting imsak, fajr, maghrib and
   /// isha prayer times at a high latitude location.
+  @nullable
   HighLatitudeAdjustment get highLatitudeAdjustment;
 
   /// Minute adjustment parameter for imsak prayer.
+  @nullable
   int get imsakMinutesAdjustment;
 
   /// Minute adjustment parameter for fajr prayer.
+  @nullable
   int get fajrMinutesAdjustment;
 
   /// Minute adjustment parameter for sunrise.
+  @nullable
   int get sunriseMinutesAdjustment;
 
   /// Minute adjustment parameter for dhuha prayer.
+  @nullable
   int get dhuhaMinutesAdjustment;
 
   /// Minute adjustment parameter for dhuhr prayer.
+  @nullable
   int get dhuhrMinutesAdjustment;
 
   /// Minute adjustment parameter for asr prayer.
+  @nullable
   int get asrMinutesAdjustment;
 
   /// Minute adjustment parameter for maghrib prayer.
+  @nullable
   int get maghribMinutesAdjustment;
 
   /// Minute adjustment parameter for isha prayer.
+  @nullable
   int get ishaMinutesAdjustment;
 }
