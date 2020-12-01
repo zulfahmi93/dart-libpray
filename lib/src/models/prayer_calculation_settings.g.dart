@@ -6,16 +6,6 @@ part of 'prayer_calculation_settings.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line
-// ignore_for_file: annotate_overrides
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_catches_without_on_clauses
-// ignore_for_file: avoid_returning_this
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: prefer_expression_function_bodies
-// ignore_for_file: sort_constructors_first
-
 Serializer<PrayerCalculationSettings> _$prayerCalculationSettingsSerializer =
     new _$PrayerCalculationSettingsSerializer();
 
@@ -30,53 +20,88 @@ class _$PrayerCalculationSettingsSerializer
   final String wireName = 'PrayerCalculationSettings';
 
   @override
-  Iterable serialize(Serializers serializers, PrayerCalculationSettings object,
+  Iterable<Object> serialize(
+      Serializers serializers, PrayerCalculationSettings object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'imsakParameter',
-      serializers.serialize(object.imsakParameter,
-          specifiedType: const FullType(PrayerCalculationParameter)),
-      'calculationMethod',
-      serializers.serialize(object.calculationMethod,
-          specifiedType: const FullType(CalculationMethod)),
-      'juristicMethod',
-      serializers.serialize(object.juristicMethod,
-          specifiedType: const FullType(JuristicMethod)),
-      'highLatitudeAdjustment',
-      serializers.serialize(object.highLatitudeAdjustment,
-          specifiedType: const FullType(HighLatitudeAdjustment)),
-      'imsakMinutesAdjustment',
-      serializers.serialize(object.imsakMinutesAdjustment,
-          specifiedType: const FullType(int)),
-      'fajrMinutesAdjustment',
-      serializers.serialize(object.fajrMinutesAdjustment,
-          specifiedType: const FullType(int)),
-      'sunriseMinutesAdjustment',
-      serializers.serialize(object.sunriseMinutesAdjustment,
-          specifiedType: const FullType(int)),
-      'dhuhaMinutesAdjustment',
-      serializers.serialize(object.dhuhaMinutesAdjustment,
-          specifiedType: const FullType(int)),
-      'dhuhrMinutesAdjustment',
-      serializers.serialize(object.dhuhrMinutesAdjustment,
-          specifiedType: const FullType(int)),
-      'asrMinutesAdjustment',
-      serializers.serialize(object.asrMinutesAdjustment,
-          specifiedType: const FullType(int)),
-      'maghribMinutesAdjustment',
-      serializers.serialize(object.maghribMinutesAdjustment,
-          specifiedType: const FullType(int)),
-      'ishaMinutesAdjustment',
-      serializers.serialize(object.ishaMinutesAdjustment,
-          specifiedType: const FullType(int)),
-    ];
-
+    final result = <Object>[];
+    if (object.imsakParameter != null) {
+      result
+        ..add('imsakParameter')
+        ..add(serializers.serialize(object.imsakParameter,
+            specifiedType: const FullType(PrayerCalculationParameter)));
+    }
+    if (object.calculationMethod != null) {
+      result
+        ..add('calculationMethod')
+        ..add(serializers.serialize(object.calculationMethod,
+            specifiedType: const FullType(CalculationMethod)));
+    }
+    if (object.juristicMethod != null) {
+      result
+        ..add('juristicMethod')
+        ..add(serializers.serialize(object.juristicMethod,
+            specifiedType: const FullType(JuristicMethod)));
+    }
+    if (object.highLatitudeAdjustment != null) {
+      result
+        ..add('highLatitudeAdjustment')
+        ..add(serializers.serialize(object.highLatitudeAdjustment,
+            specifiedType: const FullType(HighLatitudeAdjustment)));
+    }
+    if (object.imsakMinutesAdjustment != null) {
+      result
+        ..add('imsakMinutesAdjustment')
+        ..add(serializers.serialize(object.imsakMinutesAdjustment,
+            specifiedType: const FullType(int)));
+    }
+    if (object.fajrMinutesAdjustment != null) {
+      result
+        ..add('fajrMinutesAdjustment')
+        ..add(serializers.serialize(object.fajrMinutesAdjustment,
+            specifiedType: const FullType(int)));
+    }
+    if (object.sunriseMinutesAdjustment != null) {
+      result
+        ..add('sunriseMinutesAdjustment')
+        ..add(serializers.serialize(object.sunriseMinutesAdjustment,
+            specifiedType: const FullType(int)));
+    }
+    if (object.dhuhaMinutesAdjustment != null) {
+      result
+        ..add('dhuhaMinutesAdjustment')
+        ..add(serializers.serialize(object.dhuhaMinutesAdjustment,
+            specifiedType: const FullType(int)));
+    }
+    if (object.dhuhrMinutesAdjustment != null) {
+      result
+        ..add('dhuhrMinutesAdjustment')
+        ..add(serializers.serialize(object.dhuhrMinutesAdjustment,
+            specifiedType: const FullType(int)));
+    }
+    if (object.asrMinutesAdjustment != null) {
+      result
+        ..add('asrMinutesAdjustment')
+        ..add(serializers.serialize(object.asrMinutesAdjustment,
+            specifiedType: const FullType(int)));
+    }
+    if (object.maghribMinutesAdjustment != null) {
+      result
+        ..add('maghribMinutesAdjustment')
+        ..add(serializers.serialize(object.maghribMinutesAdjustment,
+            specifiedType: const FullType(int)));
+    }
+    if (object.ishaMinutesAdjustment != null) {
+      result
+        ..add('ishaMinutesAdjustment')
+        ..add(serializers.serialize(object.ishaMinutesAdjustment,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
   @override
   PrayerCalculationSettings deserialize(
-      Serializers serializers, Iterable serialized,
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new PrayerCalculationSettingsBuilder();
 
@@ -171,7 +196,7 @@ class _$PrayerCalculationSettings extends PrayerCalculationSettings {
   final int ishaMinutesAdjustment;
 
   factory _$PrayerCalculationSettings(
-          [void updates(PrayerCalculationSettingsBuilder b)]) =>
+          [void Function(PrayerCalculationSettingsBuilder) updates]) =>
       (new PrayerCalculationSettingsBuilder()..update(updates)).build();
 
   _$PrayerCalculationSettings._(
@@ -187,48 +212,11 @@ class _$PrayerCalculationSettings extends PrayerCalculationSettings {
       this.asrMinutesAdjustment,
       this.maghribMinutesAdjustment,
       this.ishaMinutesAdjustment})
-      : super._() {
-    if (imsakParameter == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'imsakParameter');
-    if (calculationMethod == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'calculationMethod');
-    if (juristicMethod == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'juristicMethod');
-    if (highLatitudeAdjustment == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'highLatitudeAdjustment');
-    if (imsakMinutesAdjustment == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'imsakMinutesAdjustment');
-    if (fajrMinutesAdjustment == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'fajrMinutesAdjustment');
-    if (sunriseMinutesAdjustment == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'sunriseMinutesAdjustment');
-    if (dhuhaMinutesAdjustment == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'dhuhaMinutesAdjustment');
-    if (dhuhrMinutesAdjustment == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'dhuhrMinutesAdjustment');
-    if (asrMinutesAdjustment == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'asrMinutesAdjustment');
-    if (maghribMinutesAdjustment == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'maghribMinutesAdjustment');
-    if (ishaMinutesAdjustment == null)
-      throw new BuiltValueNullFieldError(
-          'PrayerCalculationSettings', 'ishaMinutesAdjustment');
-  }
+      : super._();
 
   @override
   PrayerCalculationSettings rebuild(
-          void updates(PrayerCalculationSettingsBuilder b)) =>
+          void Function(PrayerCalculationSettingsBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -236,10 +224,10 @@ class _$PrayerCalculationSettings extends PrayerCalculationSettings {
       new PrayerCalculationSettingsBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! PrayerCalculationSettings) return false;
-    return imsakParameter == other.imsakParameter &&
+    return other is PrayerCalculationSettings &&
+        imsakParameter == other.imsakParameter &&
         calculationMethod == other.calculationMethod &&
         juristicMethod == other.juristicMethod &&
         highLatitudeAdjustment == other.highLatitudeAdjustment &&
@@ -390,12 +378,14 @@ class PrayerCalculationSettingsBuilder
 
   @override
   void replace(PrayerCalculationSettings other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$PrayerCalculationSettings;
   }
 
   @override
-  void update(void updates(PrayerCalculationSettingsBuilder b)) {
+  void update(void Function(PrayerCalculationSettingsBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -405,9 +395,9 @@ class PrayerCalculationSettingsBuilder
     try {
       _$result = _$v ??
           new _$PrayerCalculationSettings._(
-              imsakParameter: imsakParameter.build(),
-              calculationMethod: calculationMethod.build(),
-              juristicMethod: juristicMethod.build(),
+              imsakParameter: _imsakParameter?.build(),
+              calculationMethod: _calculationMethod?.build(),
+              juristicMethod: _juristicMethod?.build(),
               highLatitudeAdjustment: highLatitudeAdjustment,
               imsakMinutesAdjustment: imsakMinutesAdjustment,
               fajrMinutesAdjustment: fajrMinutesAdjustment,
@@ -421,11 +411,11 @@ class PrayerCalculationSettingsBuilder
       String _$failedField;
       try {
         _$failedField = 'imsakParameter';
-        imsakParameter.build();
+        _imsakParameter?.build();
         _$failedField = 'calculationMethod';
-        calculationMethod.build();
+        _calculationMethod?.build();
         _$failedField = 'juristicMethod';
-        juristicMethod.build();
+        _juristicMethod?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'PrayerCalculationSettings', _$failedField, e.toString());
@@ -436,3 +426,5 @@ class PrayerCalculationSettingsBuilder
     return _$result;
   }
 }
+
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

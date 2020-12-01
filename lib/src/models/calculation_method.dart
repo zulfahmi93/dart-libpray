@@ -132,9 +132,11 @@ abstract class PrayerCalculationParameter implements Built<PrayerCalculationPara
   // ----------------------------- PROPERTIES -----------------------------
 
   /// Type of the prayer times calculation parameter.
+  @nullable
   PrayerCalculationParameterType get type;
 
   /// Value of the prayer times calculation parameter.
+  @nullable
   double get value;
 }
 

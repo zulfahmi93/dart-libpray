@@ -6,16 +6,6 @@ part of 'juristic_method.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line
-// ignore_for_file: annotate_overrides
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_catches_without_on_clauses
-// ignore_for_file: avoid_returning_this
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: prefer_expression_function_bodies
-// ignore_for_file: sort_constructors_first
-
 const JuristicMethodPreset _$standard =
     const JuristicMethodPreset._('standard');
 const JuristicMethodPreset _$hanafi = const JuristicMethodPreset._('hanafi');
@@ -50,7 +40,7 @@ class _$JuristicMethodSerializer
   final String wireName = 'JuristicMethod';
 
   @override
-  Iterable serialize(Serializers serializers, JuristicMethod object,
+  Iterable<Object> serialize(Serializers serializers, JuristicMethod object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'preset',
@@ -65,7 +55,8 @@ class _$JuristicMethodSerializer
   }
 
   @override
-  JuristicMethod deserialize(Serializers serializers, Iterable serialized,
+  JuristicMethod deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new JuristicMethodBuilder();
 
@@ -115,18 +106,20 @@ class _$JuristicMethod extends JuristicMethod {
   @override
   final int timeOfShadow;
 
-  factory _$JuristicMethod([void updates(JuristicMethodBuilder b)]) =>
+  factory _$JuristicMethod([void Function(JuristicMethodBuilder) updates]) =>
       (new JuristicMethodBuilder()..update(updates)).build();
 
   _$JuristicMethod._({this.preset, this.timeOfShadow}) : super._() {
-    if (preset == null)
+    if (preset == null) {
       throw new BuiltValueNullFieldError('JuristicMethod', 'preset');
-    if (timeOfShadow == null)
+    }
+    if (timeOfShadow == null) {
       throw new BuiltValueNullFieldError('JuristicMethod', 'timeOfShadow');
+    }
   }
 
   @override
-  JuristicMethod rebuild(void updates(JuristicMethodBuilder b)) =>
+  JuristicMethod rebuild(void Function(JuristicMethodBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -134,10 +127,11 @@ class _$JuristicMethod extends JuristicMethod {
       new JuristicMethodBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! JuristicMethod) return false;
-    return preset == other.preset && timeOfShadow == other.timeOfShadow;
+    return other is JuristicMethod &&
+        preset == other.preset &&
+        timeOfShadow == other.timeOfShadow;
   }
 
   @override
@@ -179,12 +173,14 @@ class JuristicMethodBuilder
 
   @override
   void replace(JuristicMethod other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$JuristicMethod;
   }
 
   @override
-  void update(void updates(JuristicMethodBuilder b)) {
+  void update(void Function(JuristicMethodBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -196,3 +192,5 @@ class JuristicMethodBuilder
     return _$result;
   }
 }
+
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
